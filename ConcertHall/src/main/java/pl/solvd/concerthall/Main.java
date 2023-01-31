@@ -24,22 +24,11 @@ public class Main {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document d = builder.parse(new File("C:\\Users\\alena\\IdeaProjects\\SolvdLab\\ConcertHall\\src\\main\\resources\\classes.xml"));
-        //Element el = (Element) d.getElementsByTagName("poster").item(0);
-        //System.out.println(el.getAttribute("poster"));
-
         NodeList nodeList = d.getElementsByTagName("authors");
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node  = nodeList.item(i);
             System.out.println(nodeList.item(i));
             System.out.println(node.getTextContent());
         }
-        //System.out.println(nodeList.getLength());
-       // nodeList.item(1).getTextContent();
-       // nodeList.item(1).getAttributes().getNamedItem("composition").getTextContent();
-
-
-
-
-
     }
 }
