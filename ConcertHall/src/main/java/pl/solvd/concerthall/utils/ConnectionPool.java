@@ -16,19 +16,15 @@ public class ConnectionPool {
         try {
             Properties properties = new Properties();
             properties.load(new FileInputStream("ConcertHall/src/main/resources/mysqlcreds.properties"));
-            final String dbDriver = properties.getProperty("driver");
             final String dbUrl = properties.getProperty("url");
             final String dbUsername = properties.getProperty("login");
             final String dbPassword = properties.getProperty("password");
-            Class.forName(dbDriver);
-            this.connection = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
+            connection = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
             System.out.println("Connection established");
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Connection Error");
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

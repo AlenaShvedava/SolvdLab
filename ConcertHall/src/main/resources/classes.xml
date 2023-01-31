@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<poster>
+    <authors id="1">
+        <firstname>Pyotr</firstname>
+        <lastname>Tchaikovsky</lastname>
+        <authortypes id="1">
+            <type>composer</type>
+            <composition id="1">
+                <title>Nutcracker</title>
+                <images id="1>">
+                    <imagepath>
+                        'https://d3t6cln5382rz2.cloudfront.net/_imager/files/Shows/Nutcracker/36918/216468_4b18302267c6125912375f7ef043de1b.jpg'
+                    </imagepath>
+                    <imagepath>
+                        'https://player.vimeo.com/video/774710035?background=1'
+                    </imagepath>
+                </images>
+                <program id="1">
+                    <description>'At midnight on Christmas Eve, Clara creeps downstairs – and is instantly swept away
+                        into an enchanting winter wonderland of dancing snowflakes, magical Christmas trees and a Sugar
+                        Plum Fairy…
+                        Sir Peter Wright’s classic production of this timeless ballet returns to Birmingham Hippodrome
+                        following an extensive rebuild of John Macfarlane’s exquisite sets.
+                        Running Time: 2 hours 10 minutes'
+                    </description>
+                    <agelimit>6+</agelimit>
+                    <baseprice>28.50</baseprice>
+                    <genre id="6">
+                        <type>ballet</type>
+                    </genre>
+                    <concerthalls id="3">
+                        <name>Glasgo Theatre</name>
+                        <phone>+44 141 353 8000</phone>
+                        <address>2Sauchiehall St, Glasgow G2 3NY, UK</address>
+                    </concerthalls>
+                    <organization>'Birmingham Royal Ballet'</organization>
+                </program>
+            </composition>
+        </authortypes>
+    </authors>
+</poster>
+
+

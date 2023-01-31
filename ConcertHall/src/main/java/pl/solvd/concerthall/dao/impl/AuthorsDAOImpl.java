@@ -26,7 +26,6 @@ public class AuthorsDAOImpl extends MySqlDAO implements IAuthorsDAO {
 
     @Override
     public Authors saveEntity(Authors entity) {
-        connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(INSERT_AUTHORS_QUERY)) {
             ps.setString(1, entity.getFirstName());
             ps.setString(2, entity.getLastName());
@@ -42,7 +41,6 @@ public class AuthorsDAOImpl extends MySqlDAO implements IAuthorsDAO {
 
     @Override
     public List<Authors> getAllAuthors() throws Exception {
-        connection = ConnectionPool.getInstance().getConnection();
         List<Authors> authors = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(GET_ALL_AUTHORS_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
@@ -63,7 +61,6 @@ public class AuthorsDAOImpl extends MySqlDAO implements IAuthorsDAO {
 
     @Override
     public List<Authors> getAllAuthorsBy(Predicate<Authors> predicate) throws Exception {
-        connection = ConnectionPool.getInstance().getConnection();
         List<Authors> authorsList = getAllAuthors();
         authorsList = authorsList.stream().filter(predicate).collect(Collectors.toList());
         ConnectionPool.close();
@@ -72,7 +69,6 @@ public class AuthorsDAOImpl extends MySqlDAO implements IAuthorsDAO {
 
     @Override
     public void getEntityById(Long id) throws Exception {
-        connection = ConnectionPool.getInstance().getConnection();
         Authors author = new Authors();
         try (PreparedStatement ps = connection.prepareStatement(GET_AUTHORS_QUERY)) {
             ps.setLong(1, id);
@@ -94,7 +90,6 @@ public class AuthorsDAOImpl extends MySqlDAO implements IAuthorsDAO {
 
     @Override
     public List<Authors> updateEntity(Authors entity) throws Exception {
-        connection = ConnectionPool.getInstance().getConnection();
         List<Authors> updatedAuthors = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_AUTHORS_QUERY)) {
             ps.setString(1, entity.getFirstName());
@@ -113,7 +108,6 @@ public class AuthorsDAOImpl extends MySqlDAO implements IAuthorsDAO {
 
     @Override
     public void deleteEntity(Long id) {
-        connection = ConnectionPool.getInstance().getConnection();
         try (PreparedStatement ps = connection.prepareStatement(DELETE_AUTHORS_QUERY)) {
             ps.setLong(1, id);
             ps.executeUpdate();
