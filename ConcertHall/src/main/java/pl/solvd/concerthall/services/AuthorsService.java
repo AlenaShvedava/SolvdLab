@@ -8,4 +8,5 @@ public interface AuthorsService  {
     Authors getEntityById (Long id) throws Exception;
     void updateEntity (Authors authors) throws ServiceException;
     String deleteEntity (Long id) throws ServiceException;
+
 }

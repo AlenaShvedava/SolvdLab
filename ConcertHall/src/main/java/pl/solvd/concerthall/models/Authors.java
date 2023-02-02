@@ -3,10 +3,20 @@ package pl.solvd.concerthall.models;
 public class Authors {
     private String firstName;
     private String lastName;
+    private String AuthorTypes ;
 
-    public Authors(String firstName, String lastName) {
+    public Authors() {
+    }
+
+    public Authors(String authorTypes, String firstName, String lastName) {
+        AuthorTypes = authorTypes;
         this.firstName = firstName;
         this.lastName = lastName;
+
+    }
+
+    public String getAuthorTypes() {
+        return AuthorTypes;
     }
 
     public String getFirstName() {
@@ -27,9 +37,9 @@ public class Authors {
 
     @Override
     public String toString() {
-        return "AuthorsServiceImpl{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
+        return "\nAuthor: \n" +
+                "author type: " + AuthorTypes + "\n" +
+                "firstName: " + firstName + "\n" +
+                "lastName: " + lastName + "\n";
     }
 }

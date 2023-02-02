@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<concerthall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation='XMLSchema.xsd'>
+    <poster id="1">
+        <year>2023</year>
+        <month>1</month>
+        <day>27</day>
+        <time>11.00</time>
+        <program id="1">
+            <images id="1">
+                <imagepath>
+                    https://d3t6cln5382rz2.cloudfront.net/_imager/files/Shows/Nutcracker/36918/216468_4b18302267c6125912375f7ef043de1b.jpg
+                </imagepath>
+            </images>
+            <images id="2">
+                <imagepath>https://player.vimeo.com/video/774710035?background=1
+                </imagepath>
+            </images>
+            <composition id="1">
+                <genre id="6">
+                    <type>ballet</type>
+                </genre>
+                <title>Nutcracker</title>
+                <description>At midnight on Christmas Eve, Clara creeps downstairs – and is instantly swept away
+                    into an enchanting winter wonderland of dancing snowflakes, magical Christmas trees and a Sugar
+                    Plum Fairy…
+                    Sir Peter Wright’s classic production of this timeless ballet returns to Birmingham Hippodrome
+                    following an extensive rebuild of John Macfarlane’s exquisite sets.
+                    Running Time: 2 hours 10 minutes
+                </description>
+                <authors id="1">
+                    <authortypes id="1">
+                        <type>composer</type>
+                    </authortypes>
+                    <firstname>Pyotr</firstname>
+                    <lastname>Tchaikovsky</lastname>
+                </authors>
+                <authors id="2">
+                    <authortypes id="3">
+                        <type>producer</type>
+                    </authortypes>
+                    <firstname>Peter</firstname>
+                    <lastname>Wright</lastname>
+                </authors>
+                <authors id="3">
+                    <authortypes id="4">
+                        <type>libretist</type>
+                    </authortypes>
+                    <firstname>Marius</firstname>
+                    <lastname>Petipa</lastname>
+                </authors>
+                <authors id="4">
+                    <authortypes id="5">
+                        <type>decorator</type>
+                    </authortypes>
+                    <firstname>John</firstname>
+                    <lastname>Macfarlane</lastname>
+                </authors>
+            </composition>
+            <agelimit>6+</agelimit>
+            <baseprice>28.50</baseprice>
+            <concerthalls id="3">
+                <name>Glasgo Theatre</name>
+                <phone>+44 141 353 8000</phone>
+                <address>2Sauchiehall St, Glasgow G2 3NY, UK</address>
+            </concerthalls>
+            <organization>Birmingham Royal Ballet</organization>
+        </program>
+    </poster>
+
+    <poster id="3">
+        <year>2023</year>
+        <month>2</month>
+        <day>1</day>
+        <time>19.00</time>
+        <program>
+            <images id="6">
+                <imagepath>
+                    https://tournavigator.pro/%D1%84%D0%BE%D1%82%D0%BE%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%8F/d/3072/other/1000/1020/1466785750.tif
+                </imagepath>
+            </images>
+            <composition id="2">
+                <genre id="2">
+                    <type>show</type>
+                </genre>
+                <title>Circus du Soleil O
+                </title>
+                <description>'Weaving a tapestry of artistry, surrealism and theatrical romance, "O" pays tribute to the
+                    beauty
+                    of theatre.
+                    Inspired by the concept of infinity and the elegance of water, world-class acrobats, synchronized
+                    swimmers
+                    and divers create a breathtaking experience.'
+                </description>
+                <authors id="5">
+                    <authortypes id="3">
+                        <type>producer</type>
+                    </authortypes>
+                    <firstname>Jean-François</firstname>
+                    <lastname>Bouchard</lastname>
+                </authors>
+            </composition>
+            <agelimit>5+</agelimit>
+            <baseprice>73.00</baseprice>
+            <concerthalls id="1">
+                <name>LEGENDA Concert Hall</name>
+                <phone>+48222959000</phone>
+                <address>al. Księcia Józefa Poniatowskiego 1, 03-901 Warszawa</address>
+            </concerthalls>
+            <organization>Alter Art</organization>
+        </program>
+    </poster>
+</concerthall>
+

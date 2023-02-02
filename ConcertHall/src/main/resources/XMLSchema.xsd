@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="concerthall">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="poster" type="poster" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:byte"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="poster">
+        <xs:sequence>
+            <xs:element name="year" type="xs:int"/>
+            <xs:element name="month" type="xs:int"/>
+            <xs:element name="day" type="xs:int"/>
+            <xs:element name="time" type="xs:double"/>
+            <xs:element name="program" type="program" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:byte"/>
+    </xs:complexType>
+
+    <xs:complexType name="program">
+        <xs:sequence>
+            <xs:element name="images" type="images" maxOccurs="unbounded"/>
+            <xs:element name="composition" type="composition" maxOccurs="unbounded"/>
+            <xs:element name="agelimit" type="xs:string"/>
+            <xs:element name="baseprice" type="xs:double"/>
+            <xs:element name="concerthalls" type="concerthalls"/>
+            <xs:element name="organization" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:byte"/>
+    </xs:complexType>
+
+    <xs:complexType name="images">
+        <xs:sequence>
+            <xs:element name="imagepath" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:byte"/>
+    </xs:complexType>
+
+    <xs:complexType name="composition">
+        <xs:sequence>
+            <xs:element name="genre" type="genre"/>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="authors" type="authors" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:byte"/>
+    </xs:complexType>
+
+    <xs:complexType name="genre">
+        <xs:sequence>
+            <xs:element name="type" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:byte"/>
+    </xs:complexType>
+
+    <xs:complexType name="authors">
+        <xs:sequence>
+            <xs:element name="authortypes" type="authortypes" maxOccurs="unbounded"/>
+            <xs:element name="firstname" type="xs:string"/>
+            <xs:element name="lastname" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:byte"/>
+    </xs:complexType>
+
+    <xs:complexType name="authortypes">
+        <xs:sequence>
+            <xs:element name="type" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:byte"/>
+    </xs:complexType>
+
+    <xs:complexType name="concerthalls">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="phone" type="xs:string"/>
+            <xs:element name="address" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:byte"/>
+    </xs:complexType>
+</xs:schema>
