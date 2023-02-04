@@ -5,7 +5,6 @@
             <xs:sequence>
                 <xs:element name="poster" type="poster" maxOccurs="unbounded"/>
             </xs:sequence>
-            <xs:attribute name="id" type="xs:byte"/>
         </xs:complexType>
     </xs:element>
 
@@ -19,14 +18,14 @@
         </xs:sequence>
         <xs:attribute name="id" type="xs:byte"/>
     </xs:complexType>
-
     <xs:complexType name="program">
         <xs:sequence>
+            <xs:element name="title" type="xs:string"/>
             <xs:element name="images" type="images" maxOccurs="unbounded"/>
             <xs:element name="composition" type="composition" maxOccurs="unbounded"/>
             <xs:element name="agelimit" type="xs:string"/>
             <xs:element name="baseprice" type="xs:double"/>
-            <xs:element name="concerthalls" type="concerthalls"/>
+
             <xs:element name="organization" type="xs:string"/>
         </xs:sequence>
         <xs:attribute name="id" type="xs:byte"/>
@@ -34,7 +33,7 @@
 
     <xs:complexType name="images">
         <xs:sequence>
-            <xs:element name="imagepath" type="xs:string"/>
+            <xs:element name="imagepath" type="xs:string" />
         </xs:sequence>
         <xs:attribute name="id" type="xs:byte"/>
     </xs:complexType>

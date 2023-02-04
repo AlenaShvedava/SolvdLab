@@ -1,6 +1,6 @@
 package pl.solvd.concerthall.services;
 
-import pl.solvd.concerthall.entities.Authors;
+import pl.solvd.concerthall.models.Authors;
 import pl.solvd.concerthall.exceptions.ServiceException;
 
 public interface AuthorsService  {

@@ -1,8 +1,5 @@
 package pl.solvd.concerthall.dao;
 
-import pl.solvd.concerthall.entities.Authors;
-import pl.solvd.concerthall.exceptions.ServiceException;
-
 import java.util.List;
 
 public interface IBaseDAO <T, Id> {

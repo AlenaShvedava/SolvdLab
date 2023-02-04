@@ -1,5 +1,10 @@
 package pl.solvd.concerthall.models;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "authortypes")
 public class AuthorTypes {
     private Long id;
     private String type;
@@ -12,6 +17,7 @@ public class AuthorTypes {
         this.type = type;
     }
 
+    @XmlAttribute
     public Long getId() {
         return id;
     }
@@ -20,6 +26,7 @@ public class AuthorTypes {
         this.id = id;
     }
 
+    @XmlElement(name = "type")
     public String getType() {
         return type;
     }
@@ -30,9 +37,6 @@ public class AuthorTypes {
 
     @Override
     public String toString() {
-        return "AuthorTypes{" +
-                "id=" + id +
-                ", type='" + type + '\'' +
-                '}';
+        return type + '\n';
     }
 }

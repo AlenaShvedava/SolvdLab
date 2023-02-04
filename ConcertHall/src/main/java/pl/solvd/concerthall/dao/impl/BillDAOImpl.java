@@ -2,7 +2,7 @@ package pl.solvd.concerthall.dao.impl;
 
 import pl.solvd.concerthall.dao.interfacesDAO.IBillDAO;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.entities.Bill;
+import pl.solvd.concerthall.entities.BillEntity;
 import pl.solvd.concerthall.utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -15,7 +15,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class BillDAOImpl extends MySqlDAO implements IBillDAO {
-    Connection c;
+    private static final ConnectionPool instance = ConnectionPool.getInstance();
+    private static Connection connection = instance.getConnection();
     private static final String GET_ALL_BILLS_QUERY = "SELECT * FROM bill";
     private static final String GET_BILL_QUERY = "SELECT * FROM bill WHERE id = ?";
     private static final String INSERT_BILL_QUERY = "INSERT INTO bill (order_id, total_price, payment_status, active) VALUES(?, ?, ?, ?)";
@@ -23,9 +24,8 @@ public class BillDAOImpl extends MySqlDAO implements IBillDAO {
     private static final String DELETE_BILL_QUERY = "DELETE FROM bill WHERE id = ?";
 
     @Override
-    public Bill saveEntity(Bill entity) throws Exception {
-        c = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = c.prepareStatement (INSERT_BILL_QUERY)) {
+    public BillEntity saveEntity(BillEntity entity) throws Exception {
+        try (PreparedStatement ps = connection.prepareStatement(INSERT_BILL_QUERY)) {
             ps.setLong(1, entity.getOrderId());
             ps.setDouble(2, entity.getTotalPrice());
             ps.setString(3, entity.getPaymentStatus());
@@ -35,7 +35,7 @@ public class BillDAOImpl extends MySqlDAO implements IBillDAO {
             System.out.println(e.getMessage());
         } finally {
             try {
-                c.close();
+                connection.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -44,24 +44,23 @@ public class BillDAOImpl extends MySqlDAO implements IBillDAO {
     }
 
     @Override
-    public List<Bill> getAllBill() throws Exception {
-        c = ConnectionPool.getInstance().getConnection();
-        List<Bill> bill = new ArrayList<>();
-        try (PreparedStatement ps = c.prepareStatement(GET_ALL_BILLS_QUERY)) {
+    public List<BillEntity> getAllBill() throws Exception {
+        List<BillEntity> bill = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(GET_ALL_BILLS_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    int id = rs.getInt("id");
+                    Long id = rs.getLong("id");
                     Long orderId = rs.getLong("order_id");
                     Double totalPrice = rs.getDouble("total_price");
                     String paymentStatus = rs.getString("payment_status");
                     Boolean isActive = rs.getBoolean("active");
-                    bill.add(new Bill((long) id, orderId, totalPrice, paymentStatus, isActive));
+                    bill.add(new BillEntity(id, orderId, totalPrice, paymentStatus, isActive));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally {
                 try {
-                    c.close();
+                    connection.close();
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
@@ -71,12 +70,11 @@ public class BillDAOImpl extends MySqlDAO implements IBillDAO {
     }
 
     @Override
-    public List<Bill> getAllBillBy (Predicate<Bill> predicate) throws Exception {
-        c = ConnectionPool.getInstance().getConnection();
-        List<Bill> billList = getAllBill();
+    public List<BillEntity> getAllBillBy(Predicate<BillEntity> predicate) throws Exception {
+        List<BillEntity> billList = getAllBill();
         billList = billList.stream().filter(predicate).collect(Collectors.toList());
         try {
-            c.close();
+            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -85,9 +83,8 @@ public class BillDAOImpl extends MySqlDAO implements IBillDAO {
 
     @Override
     public void getEntityById(Long id) throws Exception {
-        c = ConnectionPool.getInstance().getConnection();
-        Bill bill = new Bill();
-        try (PreparedStatement ps = c.prepareStatement(GET_BILL_QUERY)) {
+        BillEntity bill = new BillEntity();
+        try (PreparedStatement ps = connection.prepareStatement(GET_BILL_QUERY)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -103,7 +100,7 @@ public class BillDAOImpl extends MySqlDAO implements IBillDAO {
             System.out.println(e.getMessage());
         } finally {
             try {
-                c.close();
+                connection.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -111,10 +108,9 @@ public class BillDAOImpl extends MySqlDAO implements IBillDAO {
     }
 
     @Override
-    public List<Bill> updateEntity(Bill entity) throws Exception {
-        c = ConnectionPool.getInstance().getConnection();
-        List<Bill> updatedBill = new ArrayList<>();
-        try (PreparedStatement ps = c.prepareStatement(UPDATE_BILL_QUERY)) {
+    public List<BillEntity> updateEntity(BillEntity entity) throws Exception {
+        List<BillEntity> updatedBill = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(UPDATE_BILL_QUERY)) {
             ps.setLong(1, entity.getOrderId());
             ps.setDouble(2, entity.getTotalPrice());
             ps.setString(3, entity.getPaymentStatus());
@@ -126,7 +122,7 @@ public class BillDAOImpl extends MySqlDAO implements IBillDAO {
             System.out.println(e.getMessage());
         } finally {
             try {
-                c.close();
+                connection.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -136,15 +132,14 @@ public class BillDAOImpl extends MySqlDAO implements IBillDAO {
 
     @Override
     public void deleteEntity(Long id) throws Exception {
-        c = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = c.prepareStatement(DELETE_BILL_QUERY)) {
+        try (PreparedStatement ps = connection.prepareStatement(DELETE_BILL_QUERY)) {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
             try {
-                c.close();
+                connection.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }

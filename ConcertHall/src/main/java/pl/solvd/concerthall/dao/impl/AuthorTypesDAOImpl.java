@@ -1,10 +1,8 @@
 package pl.solvd.concerthall.dao.impl;
 
 import pl.solvd.concerthall.dao.interfacesDAO.IAuthorTypesDAO;
-import pl.solvd.concerthall.dao.interfacesDAO.IAuthorsDAO;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.entities.AuthorTypes;
-import pl.solvd.concerthall.entities.Authors;
+import pl.solvd.concerthall.entities.AuthorTypesEntity;
 import pl.solvd.concerthall.utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -17,7 +15,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class AuthorTypesDAOImpl extends MySqlDAO implements IAuthorTypesDAO {
-    Connection c;
+    private static final ConnectionPool instance = ConnectionPool.getInstance();
+    private static Connection connection = instance.getConnection();
     private static final String GET_ALL_AUTHOR_TYPES_QUERY = "SELECT * FROM author_types";
     private static final String GET_AUTHOR_TYPES_QUERY = "SELECT * FROM author_types WHERE id = ?";
     private static final String INSERT_AUTHOR_TYPES_QUERY = "INSERT INTO author_types(type) VALUES(?)";
@@ -25,17 +24,15 @@ public class AuthorTypesDAOImpl extends MySqlDAO implements IAuthorTypesDAO {
     private static final String DELETE_AUTHOR_TYPES_QUERY = "DELETE FROM author_types WHERE id = ?";
 
     @Override
-    public AuthorTypes saveEntity (AuthorTypes entity) throws Exception {
-        c = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = c.prepareStatement(INSERT_AUTHOR_TYPES_QUERY)) {
+    public AuthorTypesEntity saveEntity(AuthorTypesEntity entity) throws Exception {
+        try (PreparedStatement ps = connection.prepareStatement(INSERT_AUTHOR_TYPES_QUERY)) {
             ps.setString(1, entity.getType());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
-        finally {
+        } finally {
             try {
-                c.close();
+                connection.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -44,21 +41,20 @@ public class AuthorTypesDAOImpl extends MySqlDAO implements IAuthorTypesDAO {
     }
 
     @Override
-    public List<AuthorTypes> getAllAuthorTypes() throws Exception {
-        c = ConnectionPool.getInstance().getConnection();
-        List<AuthorTypes> authorTypes = new ArrayList<>();
-        try (PreparedStatement ps = c.prepareStatement(GET_ALL_AUTHOR_TYPES_QUERY)) {
+    public List<AuthorTypesEntity> getAllAuthorTypes() throws Exception {
+        List<AuthorTypesEntity> authorTypes = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(GET_ALL_AUTHOR_TYPES_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    int id = rs.getInt("id");
+                    Long id = rs.getLong("id");
                     String type = rs.getString("type");
-                    authorTypes.add(new AuthorTypes((long) id, type));
+                    authorTypes.add(new AuthorTypesEntity((long) id, type));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             } finally {
                 try {
-                    c.close();
+                    connection.close();
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
                 }
@@ -68,12 +64,11 @@ public class AuthorTypesDAOImpl extends MySqlDAO implements IAuthorTypesDAO {
     }
 
     @Override
-    public List<AuthorTypes> getAllAuthorTypesBy(Predicate<AuthorTypes> predicate) throws Exception {
-        c = ConnectionPool.getInstance().getConnection();
-        List<AuthorTypes> authorsList = getAllAuthorTypes();
+    public List<AuthorTypesEntity> getAllAuthorTypesBy(Predicate<AuthorTypesEntity> predicate) throws Exception {
+        List<AuthorTypesEntity> authorsList = getAllAuthorTypes();
         authorsList = authorsList.stream().filter(predicate).collect(Collectors.toList());
         try {
-            c.close();
+            connection.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -82,9 +77,8 @@ public class AuthorTypesDAOImpl extends MySqlDAO implements IAuthorTypesDAO {
 
     @Override
     public void getEntityById(Long id) throws Exception {
-        c = ConnectionPool.getInstance().getConnection();
-        AuthorTypes authorTypes = new AuthorTypes();
-        try (PreparedStatement ps = c.prepareStatement(GET_AUTHOR_TYPES_QUERY)) {
+        AuthorTypesEntity authorTypes = new AuthorTypesEntity();
+        try (PreparedStatement ps = connection.prepareStatement(GET_AUTHOR_TYPES_QUERY)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -95,10 +89,9 @@ public class AuthorTypesDAOImpl extends MySqlDAO implements IAuthorTypesDAO {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }
-        finally {
+        } finally {
             try {
-                c.close();
+                connection.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -106,20 +99,18 @@ public class AuthorTypesDAOImpl extends MySqlDAO implements IAuthorTypesDAO {
     }
 
     @Override
-    public List<AuthorTypes> updateEntity(AuthorTypes entity) throws Exception {
-        c = ConnectionPool.getInstance().getConnection();
-        List<AuthorTypes> updatedAuthors = new ArrayList<>();
-        try (PreparedStatement ps = c.prepareStatement(UPDATE_AUTHOR_TYPES_QUERY)) {
+    public List<AuthorTypesEntity> updateEntity(AuthorTypesEntity entity) throws Exception {
+        List<AuthorTypesEntity> updatedAuthors = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(UPDATE_AUTHOR_TYPES_QUERY)) {
             ps.setString(1, entity.getType());
             ps.setLong(2, entity.getId());
             ps.executeUpdate();
             updatedAuthors = getAllAuthorTypes();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
-        finally {
+        } finally {
             try {
-                c.close();
+                connection.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -129,16 +120,14 @@ public class AuthorTypesDAOImpl extends MySqlDAO implements IAuthorTypesDAO {
 
     @Override
     public void deleteEntity(Long id) throws Exception {
-        c = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement ps = c.prepareStatement(DELETE_AUTHOR_TYPES_QUERY)) {
+        try (PreparedStatement ps = connection.prepareStatement(DELETE_AUTHOR_TYPES_QUERY)) {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-        }
-        finally {
+        } finally {
             try {
-                c.close();
+                connection.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }

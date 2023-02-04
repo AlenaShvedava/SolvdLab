@@ -1,6 +1,5 @@
 package pl.solvd.concerthall.services;
 
-import pl.solvd.concerthall.entities.Authors;
 import pl.solvd.concerthall.exceptions.ServiceException;
 import pl.solvd.concerthall.models.Bill;
 
