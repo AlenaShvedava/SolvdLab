@@ -2,8 +2,7 @@ package pl.solvd.concerthall.dao.impl;
 
 import pl.solvd.concerthall.dao.interfacesDAO.IOrganizationDAO;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.entities.AuthorsEntity;
-import pl.solvd.concerthall.entities.OrganizationEntity;
+import pl.solvd.concerthall.entities.Organization;
 import pl.solvd.concerthall.utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class OrganizationDAOImpl extends MySqlDAO implements IOrganizationDAO {
     private static final ConnectionPool instance = ConnectionPool.getInstance();
-    private static Connection connection = instance.getConnection();
+    private static final Connection connection = instance.getConnection();
 
     private static final String GET_ALL_ORGANIZATION_QUERY = "SELECT * FROM organization";
     private static final String GET_ORGANIZATION_QUERY = "SELECT * FROM organization WHERE id = ?";
@@ -26,7 +25,7 @@ public class OrganizationDAOImpl extends MySqlDAO implements IOrganizationDAO {
     private static final String DELETE_ORGANIZATION_QUERY = "DELETE FROM organization WHERE id = ?";
 
     @Override
-    public OrganizationEntity saveEntity(OrganizationEntity entity) {
+    public Organization addEntity(Organization entity) {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_ORGANIZATION_QUERY)) {
             ps.setString(1, entity.getName());
             ps.executeUpdate();
@@ -39,14 +38,14 @@ public class OrganizationDAOImpl extends MySqlDAO implements IOrganizationDAO {
     }
 
     @Override
-    public List<OrganizationEntity> getAllOrganization() throws Exception {
-        List<OrganizationEntity> organization = new ArrayList<>();
+    public List<Organization> getAll() throws Exception {
+        List<Organization> organization = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(GET_ALL_ORGANIZATION_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Long id = rs.getLong("id");
                     String name = rs.getString("name");
-                    organization.add(new OrganizationEntity(id, name));
+                    organization.add(new Organization(id, name));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -58,23 +57,23 @@ public class OrganizationDAOImpl extends MySqlDAO implements IOrganizationDAO {
     }
 
     @Override
-    public List<OrganizationEntity> getAllOrganizationBy(Predicate<OrganizationEntity> predicate) throws Exception {
-        List<OrganizationEntity> organizationList = getAllOrganization();
+    public List<Organization> getAllOrganizationBy(Predicate<Organization> predicate) throws Exception {
+        List<Organization> organizationList = getAll();
         organizationList = organizationList.stream().filter(predicate).collect(Collectors.toList());
         ConnectionPool.close();
         return organizationList;
     }
 
     @Override
-    public void getEntityById(Long id) throws Exception {
-        OrganizationEntity organization = new OrganizationEntity();
+    public Organization getEntityById(Long id) throws Exception {
+        Organization organization = new Organization();
         try (PreparedStatement ps = connection.prepareStatement(GET_ORGANIZATION_QUERY)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     organization.setId(rs.getLong(1));
                     organization.setName(rs.getString(2));
-                    System.out.println(organization.getId() + "," + organization.getName());
+                    System.out.println(Organization.getId() + "," + organization.getName());
                 }
             }
         } catch (Exception e) {
@@ -82,16 +81,17 @@ public class OrganizationDAOImpl extends MySqlDAO implements IOrganizationDAO {
         } finally {
             ConnectionPool.close();
         }
+        return organization;
     }
 
     @Override
-    public List<OrganizationEntity> updateEntity(OrganizationEntity entity) throws Exception {
-        List<OrganizationEntity> updatedOrganization = new ArrayList<>();
+    public List<Organization> updateEntity(Organization entity) throws Exception {
+        List<Organization> updatedOrganization = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_ORGANIZATION_QUERY)) {
             ps.setString(1, entity.getName());
-            ps.setLong(2, entity.getId());
+            ps.setLong(2, Organization.getId());
             ps.executeUpdate();
-            updatedOrganization = getAllOrganization();
+            updatedOrganization = getAll();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {

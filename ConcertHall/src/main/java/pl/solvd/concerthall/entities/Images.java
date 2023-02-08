@@ -2,23 +2,23 @@ package pl.solvd.concerthall.entities;
 
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
 
-public class ImagesEntity extends MySqlDAO {
-    private Long id;
+public class Images extends MySqlDAO {
+    private static Long id;
     private String imagePath;
     private Long programId;
     private boolean isPrimary;
 
-    public ImagesEntity() {
+    public Images() {
     }
 
-    public ImagesEntity(Long id, String imagePath, Long programId, boolean isPrimary) {
+    public Images(Long id, String imagePath, Long programId, boolean isPrimary) {
         this.id = id;
         this.imagePath = imagePath;
         this.programId = programId;
         this.isPrimary = isPrimary;
     }
 
-    public Long getId() {
+    public static Long getId() {
         return id;
     }
 
@@ -52,11 +52,6 @@ public class ImagesEntity extends MySqlDAO {
 
     @Override
     public String toString() {
-        return "Images{" +
-                "id=" + id +
-                ", imagePath='" + imagePath + '\'' +
-                ", programId=" + programId +
-                ", isPrimary=" + isPrimary +
-                '}';
+        return imagePath + '\n';
     }
 }

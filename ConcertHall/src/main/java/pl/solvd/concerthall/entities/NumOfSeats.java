@@ -2,23 +2,23 @@ package pl.solvd.concerthall.entities;
 
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
 
-public class NumOfSeatsEntity extends MySqlDAO {
-    private Long id;
+public class NumOfSeats extends MySqlDAO {
+    private static Long id;
     private Long concertHallsId;
     private Long priceLevelId;
     private int amountOfSeats;
 
-    public NumOfSeatsEntity() {
+    public NumOfSeats() {
     }
 
-    public NumOfSeatsEntity(Long id, Long concertHallsId, Long priceLevelId, int amountOfSeats) {
+    public NumOfSeats(Long id, Long concertHallsId, Long priceLevelId, int amountOfSeats) {
         this.id = id;
         this.concertHallsId = concertHallsId;
         this.priceLevelId = priceLevelId;
         this.amountOfSeats = amountOfSeats;
     }
 
-    public Long getId() {
+    public static Long getId() {
         return id;
     }
 

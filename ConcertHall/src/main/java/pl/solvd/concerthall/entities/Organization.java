@@ -1,19 +1,19 @@
 package pl.solvd.concerthall.entities;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
 
-public class OrganizationEntity extends MySqlDAO {
-    private Long id;
+public class Organization extends MySqlDAO {
+    private static Long id;
     private String name;
 
-    public OrganizationEntity() {
+    public Organization() {
     }
 
-    public OrganizationEntity(Long id, String name) {
+    public Organization(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Long getId() {
+    public static Long getId() {
         return id;
     }
 
@@ -31,9 +31,6 @@ public class OrganizationEntity extends MySqlDAO {
 
     @Override
     public String toString() {
-        return "Organization{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return "\nOrganization: " + name + '\n';
     }
 }

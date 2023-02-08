@@ -2,8 +2,7 @@ package pl.solvd.concerthall.dao.impl;
 
 import pl.solvd.concerthall.dao.interfacesDAO.ITicketDAO;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.entities.AuthorsEntity;
-import pl.solvd.concerthall.entities.TicketEntity;
+import pl.solvd.concerthall.entities.Ticket;
 import pl.solvd.concerthall.utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -17,8 +16,7 @@ import java.util.stream.Collectors;
 
 public class TicketDAOImpl extends MySqlDAO implements ITicketDAO {
     private static final ConnectionPool instance = ConnectionPool.getInstance();
-    private static Connection connection = instance.getConnection();
-
+    private static final Connection connection = instance.getConnection();
     private static final String GET_ALL_TICKET_QUERY = "SELECT * FROM ticket";
     private static final String GET_TICKET_QUERY = "SELECT * FROM ticket WHERE id = ?";
     private static final String INSERT_TICKET_QUERY = "INSERT INTO ticket (order_id, my_seat_id, price, active) VALUES(?, ?, ?, ?)";
@@ -26,7 +24,7 @@ public class TicketDAOImpl extends MySqlDAO implements ITicketDAO {
     private static final String DELETE_TICKET_QUERY = "DELETE FROM ticket WHERE id = ?";
 
     @Override
-    public TicketEntity saveEntity(TicketEntity entity) {
+    public Ticket addEntity(Ticket entity) {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_TICKET_QUERY)) {
             ps.setLong(1, entity.getOrderId());
             ps.setLong(2, entity.getMySeatId());
@@ -42,8 +40,8 @@ public class TicketDAOImpl extends MySqlDAO implements ITicketDAO {
     }
 
     @Override
-    public List<TicketEntity> getAllTicket() throws Exception {
-        List<TicketEntity> ticket = new ArrayList<>();
+    public List<Ticket> getAll() throws Exception {
+        List<Ticket> ticket = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(GET_ALL_TICKET_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -51,8 +49,8 @@ public class TicketDAOImpl extends MySqlDAO implements ITicketDAO {
                     Long orderId = rs.getLong("order_id");
                     Long mySeatId = rs.getLong("my_seat_id");
                     int price = rs.getInt("price");
-                    Boolean active = rs.getBoolean("active");
-                    ticket.add(new TicketEntity(id, orderId, mySeatId, price, active));
+                    boolean active = rs.getBoolean("active");
+                    ticket.add(new Ticket(id, orderId, mySeatId, price, active));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -64,16 +62,16 @@ public class TicketDAOImpl extends MySqlDAO implements ITicketDAO {
     }
 
     @Override
-    public List<TicketEntity> getAllTicketBy(Predicate<TicketEntity> predicate) throws Exception {
-        List<TicketEntity> ticketList = getAllTicket();
+    public List<Ticket> getAllTicketBy(Predicate<Ticket> predicate) throws Exception {
+        List<Ticket> ticketList = getAll();
         ticketList = ticketList.stream().filter(predicate).collect(Collectors.toList());
         ConnectionPool.close();
         return ticketList;
     }
 
     @Override
-    public void getEntityById(Long id) throws Exception {
-        TicketEntity ticket = new TicketEntity();
+    public Ticket getEntityById(Long id) throws Exception {
+        Ticket ticket = new Ticket();
         try (PreparedStatement ps = connection.prepareStatement(GET_TICKET_QUERY)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -83,7 +81,7 @@ public class TicketDAOImpl extends MySqlDAO implements ITicketDAO {
                     ticket.setMySeatId(rs.getLong(3));
                     ticket.setPrice(rs.getInt(3));
                     ticket.setActive(rs.getBoolean(3));
-                    System.out.println(ticket.getId() + "," + ticket.getOrderId() + "," + ticket.getMySeatId() + "," + ticket.getPrice() + "," + ticket.isActive());
+                    System.out.println(Ticket.getId() + "," + ticket.getOrderId() + "," + ticket.getMySeatId() + "," + ticket.getPrice() + "," + ticket.isActive());
                 }
             }
         } catch (Exception e) {
@@ -91,19 +89,20 @@ public class TicketDAOImpl extends MySqlDAO implements ITicketDAO {
         } finally {
             ConnectionPool.close();
         }
+        return ticket;
     }
 
     @Override
-    public List<TicketEntity> updateEntity(TicketEntity entity) throws Exception {
-        List<TicketEntity> updatedTicket = new ArrayList<>();
+    public List<Ticket> updateEntity(Ticket entity) throws Exception {
+        List<Ticket> updatedTicket = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_TICKET_QUERY)) {
             ps.setLong(1, entity.getOrderId());
             ps.setLong(2, entity.getMySeatId());
             ps.setInt(3, entity.getPrice());
             ps.setBoolean(4, entity.isActive());
-            ps.setLong(5, entity.getId());
+            ps.setLong(5, Ticket.getId());
             ps.executeUpdate();
-            updatedTicket = getAllTicket();
+            updatedTicket = getAll();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {

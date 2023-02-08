@@ -2,8 +2,7 @@ package pl.solvd.concerthall.dao.impl;
 
 import pl.solvd.concerthall.dao.interfacesDAO.IProgramHasCompositionDAO;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.entities.AuthorsHasAuthorTypesEntity;
-import pl.solvd.concerthall.entities.ProgramHasCompositionEntity;
+import pl.solvd.concerthall.entities.ProgramHasComposition;
 import pl.solvd.concerthall.utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class ProgramHasCompositionDAOImpl extends MySqlDAO implements IProgramHasCompositionDAO {
     private static final ConnectionPool instance = ConnectionPool.getInstance();
-    private static Connection connection = instance.getConnection();
+    private static final Connection connection = instance.getConnection();
     private static final String GET_ALL_PROGRAM_HAS_COMPOSITION_QUERY = "SELECT * FROM program_has_composition";
     private static final String GET_PROGRAM_HAS_COMPOSITION_QUERY = "SELECT * FROM program_has_composition WHERE program_id = ?";
     private static final String INSERT_PROGRAM_HAS_COMPOSITION_QUERY = "INSERT INTO program_has_composition (program_id, composition_id) VALUES(?, ?)";
@@ -25,7 +24,7 @@ public class ProgramHasCompositionDAOImpl extends MySqlDAO implements IProgramHa
     private static final String DELETE_PROGRAM_HAS_COMPOSITION_QUERY = "DELETE FROM program_has_composition WHERE program_id = ?";
 
     @Override
-    public ProgramHasCompositionEntity saveEntity(ProgramHasCompositionEntity entity) throws Exception {
+    public ProgramHasComposition addEntity(ProgramHasComposition entity) throws Exception {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_PROGRAM_HAS_COMPOSITION_QUERY)) {
             ps.setLong(1, entity.getProgramId());
             ps.setLong(2, entity.getCompositionId());
@@ -43,10 +42,11 @@ public class ProgramHasCompositionDAOImpl extends MySqlDAO implements IProgramHa
     }
 
     @Override
-    public void getEntityById(Long programId) throws Exception {
-        ProgramHasCompositionEntity programHasComposition = new ProgramHasCompositionEntity();
+    public void getEntityByProgramIdAndCompositionId(Long programId, Long compositionId) {
+        ProgramHasComposition programHasComposition = new ProgramHasComposition();
         try (PreparedStatement ps = connection.prepareStatement(GET_PROGRAM_HAS_COMPOSITION_QUERY)) {
             ps.setLong(1, programId);
+            ps.setLong(2, compositionId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     programHasComposition.setProgramId(rs.getLong(1));
@@ -66,13 +66,13 @@ public class ProgramHasCompositionDAOImpl extends MySqlDAO implements IProgramHa
     }
 
     @Override
-    public List<ProgramHasCompositionEntity> updateEntity(ProgramHasCompositionEntity entity) throws Exception {
-        List<ProgramHasCompositionEntity> updatedProgramHasComposition = new ArrayList<>();
+    public List<ProgramHasComposition> updateEntity(ProgramHasComposition entity) throws Exception {
+        List<ProgramHasComposition> updatedProgramHasComposition = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_PROGRAM_HAS_COMPOSITION_QUERY)) {
             ps.setLong(1, entity.getCompositionId());
             ps.setLong(2, entity.getProgramId());
             ps.executeUpdate();
-            updatedProgramHasComposition = getAllProgramHasComposition();
+            updatedProgramHasComposition = getAll();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {
@@ -102,14 +102,14 @@ public class ProgramHasCompositionDAOImpl extends MySqlDAO implements IProgramHa
     }
 
     @Override
-    public List<ProgramHasCompositionEntity> getAllProgramHasComposition() throws Exception {
-        List<ProgramHasCompositionEntity> programHasComposition = new ArrayList<>();
+    public List<ProgramHasComposition> getAll() throws Exception {
+        List<ProgramHasComposition> programHasComposition = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(GET_ALL_PROGRAM_HAS_COMPOSITION_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Long programId = rs.getLong("authors_id");
                     Long compositionId = rs.getLong("author_type_id");
-                    programHasComposition.add(new ProgramHasCompositionEntity(programId, compositionId));
+                    programHasComposition.add(new ProgramHasComposition(programId, compositionId));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -120,13 +120,13 @@ public class ProgramHasCompositionDAOImpl extends MySqlDAO implements IProgramHa
                     System.out.println(e.getMessage());
                 }
             }
-            return getAllProgramHasComposition();
+            return programHasComposition;
         }
     }
 
     @Override
-    public List<ProgramHasCompositionEntity> getAllProgramHasCompositionBy (Predicate<ProgramHasCompositionEntity> predicate) throws Exception {
-        List<ProgramHasCompositionEntity> programHasCompositionList = getAllProgramHasComposition();
+    public List<ProgramHasComposition> getAllProgramHasCompositionBy(Predicate<ProgramHasComposition> predicate) throws Exception {
+        List<ProgramHasComposition> programHasCompositionList = getAll();
         programHasCompositionList = programHasCompositionList.stream().filter(predicate).collect(Collectors.toList());
         try {
             connection.close();

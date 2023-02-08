@@ -1,16 +1,27 @@
 package pl.solvd.concerthall;
 
-import pl.solvd.concerthall.models.Poster;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-import java.io.File;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import pl.solvd.concerthall.services.*;
 
 public class App {
+    public static final Logger LOG = LogManager.getLogger(App.class.getName());
     public static void main(String[] args) throws Exception {
-        JAXBContext j = JAXBContext.newInstance(ConcertHall.class);
-        Unmarshaller u = j.createUnmarshaller();
-        ConcertHall c = (ConcertHall) u.unmarshal(new File("ConcertHall//src//main//resources//concerthall.xml"));
-        System.out.println(c.getPoster().get(0));
+        AuthorsService authorsService = new AuthorsService();
+        AuthorTypesService authorTypesService = new AuthorTypesService();
+        BillService billService = new BillService();
+        CompositionService compositionService = new CompositionService();
+        ConcertHallsService concertHallsService = new ConcertHallsService();
+        CustomerService customerService = new CustomerService();
+        GenreService genreService = new GenreService();
+        ImagesService imagesService = new ImagesService();
+        MySeatService mySeatService = new MySeatService();
+        NumOfSeatsService numOfSeatsService = new NumOfSeatsService();
+        OrderService orderService = new OrderService();
+        OrganizationService organizationService = new OrganizationService();
+        PosterService posterService = new PosterService();
+        PriceLevelService priceLevelService = new PriceLevelService();
+        ProgramService programService = new ProgramService();
+        TicketService ticketService = new TicketService();
     }
 }

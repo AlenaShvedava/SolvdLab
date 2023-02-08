@@ -3,14 +3,14 @@ package pl.solvd.concerthall.entities;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
 
 
-public class CompositionHasAuthorsEntity extends MySqlDAO {
+public class CompositionHasAuthors extends MySqlDAO {
     private Long compositionId;
     private Long authorsId;
 
-    public CompositionHasAuthorsEntity() {
+    public CompositionHasAuthors() {
     }
 
-    public CompositionHasAuthorsEntity(Long compositionId, Long authorsId) {
+    public CompositionHasAuthors(Long compositionId, Long authorsId) {
         this.compositionId = compositionId;
         this.authorsId = authorsId;
     }

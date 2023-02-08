@@ -2,9 +2,7 @@ package pl.solvd.concerthall.dao.impl;
 
 import pl.solvd.concerthall.dao.interfacesDAO.ICompositionHasAuthorsDAO;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.entities.AuthorsEntity;
-import pl.solvd.concerthall.entities.CompositionEntity;
-import pl.solvd.concerthall.entities.CompositionHasAuthorsEntity;
+import pl.solvd.concerthall.entities.CompositionHasAuthors;
 import pl.solvd.concerthall.utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -18,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class CompositionHasAuthorsDAOImpl extends MySqlDAO implements ICompositionHasAuthorsDAO {
     private static final ConnectionPool instance = ConnectionPool.getInstance();
-    private static Connection connection = instance.getConnection();
+    private static final Connection connection = instance.getConnection();
 
     private static final String GET_ALL_COMPOSITION_HAS_AUTHORS_QUERY = "SELECT * FROM composition_has_authors";
     private static final String GET_COMPOSITION_HAS_AUTHORS_QUERY = "SELECT * FROM composition_has_authors WHERE composition_id = ?";
@@ -27,7 +25,7 @@ public class CompositionHasAuthorsDAOImpl extends MySqlDAO implements ICompositi
     private static final String DELETE_COMPOSITION_HAS_AUTHORS_QUERY = "DELETE FROM composition_has_authors WHERE composition_id = ?";
 
     @Override
-    public CompositionHasAuthorsEntity saveEntity(CompositionHasAuthorsEntity entity) {
+    public CompositionHasAuthors addEntity(CompositionHasAuthors entity) {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_COMPOSITION_HAS_AUTHORS_QUERY)) {
             ps.setLong(1, entity.getCompositionId());
             ps.setLong(2, entity.getAuthorsId());
@@ -41,14 +39,14 @@ public class CompositionHasAuthorsDAOImpl extends MySqlDAO implements ICompositi
     }
 
     @Override
-    public List<CompositionHasAuthorsEntity> getAllCompositionHasAuthors() throws Exception {
-        List<CompositionHasAuthorsEntity> compositionHasAuthors = new ArrayList<>();
+    public List<CompositionHasAuthors> getAll() throws Exception {
+        List<CompositionHasAuthors> compositionHasAuthors = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(GET_ALL_COMPOSITION_HAS_AUTHORS_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Long compositionId = rs.getLong("composition_id");
                     Long authorsId = rs.getLong("authors_id");
-                    compositionHasAuthors.add(new CompositionHasAuthorsEntity(compositionId, authorsId));
+                    compositionHasAuthors.add(new CompositionHasAuthors(compositionId, authorsId));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -60,21 +58,23 @@ public class CompositionHasAuthorsDAOImpl extends MySqlDAO implements ICompositi
     }
 
     @Override
-    public List<CompositionHasAuthorsEntity> getAllCompositionHasAuthorsBy(Predicate<CompositionHasAuthorsEntity> predicate) throws Exception {
-        List<CompositionHasAuthorsEntity> compositionHasAuthorsList = getAllCompositionHasAuthors();
+    public List<CompositionHasAuthors> getAllCompositionHasAuthorsBy(Predicate<CompositionHasAuthors> predicate) throws Exception {
+        List<CompositionHasAuthors> compositionHasAuthorsList = getAll();
         compositionHasAuthorsList = compositionHasAuthorsList.stream().filter(predicate).collect(Collectors.toList());
         ConnectionPool.close();
         return compositionHasAuthorsList;
     }
 
     @Override
-    public void getEntityById(Long compositionId) throws Exception {
-        CompositionHasAuthorsEntity compositionHasAuthors = new CompositionHasAuthorsEntity();
+    public void getEntityByCompositionIdAndAuthorsId(Long compositionId, Long authorsId) {
+        CompositionHasAuthors compositionHasAuthors = new CompositionHasAuthors();
         try (PreparedStatement ps = connection.prepareStatement(GET_COMPOSITION_HAS_AUTHORS_QUERY)) {
             ps.setLong(1, compositionId);
+            ps.setLong(2, authorsId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     compositionHasAuthors.setCompositionId(rs.getLong(1));
+                    compositionHasAuthors.setAuthorsId(rs.getLong(2));
                     System.out.println(compositionHasAuthors.getCompositionId() + "," + compositionHasAuthors.getAuthorsId());
                 }
             }
@@ -86,13 +86,13 @@ public class CompositionHasAuthorsDAOImpl extends MySqlDAO implements ICompositi
     }
 
     @Override
-    public List<CompositionHasAuthorsEntity> updateEntity(CompositionHasAuthorsEntity entity) throws Exception {
-        List<CompositionHasAuthorsEntity> updatedCompositionHasAuthors = new ArrayList<>();
+    public List<CompositionHasAuthors> updateEntity(CompositionHasAuthors entity) throws Exception {
+        List<CompositionHasAuthors> updatedCompositionHasAuthors = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_COMPOSITION_HAS_AUTHORS_QUERY)) {
             ps.setLong(1, entity.getAuthorsId());
             ps.setLong(3, entity.getCompositionId());
             ps.executeUpdate();
-            updatedCompositionHasAuthors = getAllCompositionHasAuthors();
+            updatedCompositionHasAuthors = getAll();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {

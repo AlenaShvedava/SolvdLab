@@ -2,8 +2,7 @@ package pl.solvd.concerthall.dao.impl;
 
 import pl.solvd.concerthall.dao.interfacesDAO.IPriceLevelDAO;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.entities.AuthorsEntity;
-import pl.solvd.concerthall.entities.PriceLevelEntity;
+import pl.solvd.concerthall.entities.PriceLevel;
 import pl.solvd.concerthall.utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class PriceLevelDAOImpl extends MySqlDAO implements IPriceLevelDAO {
     private static final ConnectionPool instance = ConnectionPool.getInstance();
-    private static Connection connection = instance.getConnection();
+    private static final Connection connection = instance.getConnection();
 
     private static final String GET_ALL_PRICE_LEVEL_QUERY = "SELECT * FROM price_level";
     private static final String GET_PRICE_LEVEL_QUERY = "SELECT * FROM price_level WHERE id = ?";
@@ -26,7 +25,7 @@ public class PriceLevelDAOImpl extends MySqlDAO implements IPriceLevelDAO {
     private static final String DELETE_PRICE_LEVEL_QUERY = "DELETE FROM price_level WHERE id = ?";
 
     @Override
-    public PriceLevelEntity saveEntity(PriceLevelEntity entity) {
+    public PriceLevel addEntity(PriceLevel entity) {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_PRICE_LEVEL_QUERY)) {
             ps.setString(1, entity.getType());
             ps.setDouble(2, entity.getCoefficient());
@@ -40,15 +39,15 @@ public class PriceLevelDAOImpl extends MySqlDAO implements IPriceLevelDAO {
     }
 
     @Override
-    public List<PriceLevelEntity> getAllPriceLevel() throws Exception {
-        List<PriceLevelEntity> priceLevel = new ArrayList<>();
+    public List<PriceLevel> getAll() throws Exception {
+        List<PriceLevel> priceLevel = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(GET_ALL_PRICE_LEVEL_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Long id = rs.getLong("id");
                     String type = rs.getString("type");
                     double coefficient = rs.getDouble("coefficient");
-                    priceLevel.add(new PriceLevelEntity(id, type, coefficient));
+                    priceLevel.add(new PriceLevel(id, type, coefficient));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -60,16 +59,16 @@ public class PriceLevelDAOImpl extends MySqlDAO implements IPriceLevelDAO {
     }
 
     @Override
-    public List<PriceLevelEntity> getAllPriceLevelBy(Predicate<PriceLevelEntity> predicate) throws Exception {
-        List<PriceLevelEntity> priceLevelList = getAllPriceLevel();
+    public List<PriceLevel> getAllPriceLevelBy(Predicate<PriceLevel> predicate) throws Exception {
+        List<PriceLevel> priceLevelList = getAll();
         priceLevelList = priceLevelList.stream().filter(predicate).collect(Collectors.toList());
         ConnectionPool.close();
         return priceLevelList;
     }
 
     @Override
-    public void getEntityById(Long id) throws Exception {
-        PriceLevelEntity priceLevel = new PriceLevelEntity();
+    public PriceLevel getEntityById(Long id) throws Exception {
+        PriceLevel priceLevel = new PriceLevel();
         try (PreparedStatement ps = connection.prepareStatement(GET_PRICE_LEVEL_QUERY)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -77,7 +76,7 @@ public class PriceLevelDAOImpl extends MySqlDAO implements IPriceLevelDAO {
                     priceLevel.setId(rs.getLong(1));
                     priceLevel.setType(rs.getString(2));
                     priceLevel.setCoefficient(rs.getDouble(3));
-                    System.out.println(priceLevel.getId() + "," + priceLevel.getType() + "," + priceLevel.getCoefficient());
+                    System.out.println(PriceLevel.getId() + "," + priceLevel.getType() + "," + priceLevel.getCoefficient());
                 }
             }
         } catch (Exception e) {
@@ -85,17 +84,18 @@ public class PriceLevelDAOImpl extends MySqlDAO implements IPriceLevelDAO {
         } finally {
             ConnectionPool.close();
         }
+        return priceLevel;
     }
 
     @Override
-    public List<PriceLevelEntity> updateEntity(PriceLevelEntity entity) throws Exception {
-        List<PriceLevelEntity> updatedPriceLevel = new ArrayList<>();
+    public List<PriceLevel> updateEntity(PriceLevel entity) throws Exception {
+        List<PriceLevel> updatedPriceLevel = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_PRICE_LEVEL_QUERY)) {
             ps.setString(1, entity.getType());
             ps.setDouble(2, entity.getCoefficient());
-            ps.setLong(3, entity.getId());
+            ps.setLong(3, PriceLevel.getId());
             ps.executeUpdate();
-            updatedPriceLevel = getAllPriceLevel();
+            updatedPriceLevel = getAll();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {

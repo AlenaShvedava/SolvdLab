@@ -2,19 +2,21 @@ package pl.solvd.concerthall.entities;
 
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
 
-public class GenreEntity extends MySqlDAO {
-    private Long id;
+public class PriceLevel extends MySqlDAO {
+    private static Long id;
     private String type;
+    private double coefficient;
 
-    public GenreEntity() {
+    public PriceLevel() {
     }
 
-    public GenreEntity(Long id, String type) {
+    public PriceLevel(Long id, String type, double coefficient) {
         this.id = id;
         this.type = type;
+        this.coefficient = coefficient;
     }
 
-    public Long getId() {
+    public static Long getId() {
         return id;
     }
 
@@ -30,11 +32,20 @@ public class GenreEntity extends MySqlDAO {
         this.type = type;
     }
 
+    public double getCoefficient() {
+        return coefficient;
+    }
+
+    public void setCoefficient(double coefficient) {
+        this.coefficient = coefficient;
+    }
+
     @Override
     public String toString() {
-        return "Genre{" +
+        return "PriceLevel{" +
                 "id=" + id +
                 ", type='" + type + '\'' +
+                ", coefficient=" + coefficient +
                 '}';
     }
 }

@@ -2,14 +2,14 @@ package pl.solvd.concerthall.entities;
 
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
 
-public class PosterHasProgramEntity extends MySqlDAO {
+public class PosterHasProgram extends MySqlDAO {
     private Long posterId;
     private Long programId;
 
-    public PosterHasProgramEntity() {
+    public PosterHasProgram() {
     }
 
-    public PosterHasProgramEntity(Long posterId, Long programId) {
+    public PosterHasProgram(Long posterId, Long programId) {
         this.posterId = posterId;
         this.programId = programId;
     }

@@ -2,8 +2,7 @@ package pl.solvd.concerthall.dao.impl;
 
 import pl.solvd.concerthall.dao.interfacesDAO.IProgramHasGenreDAO;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.entities.AuthorsHasAuthorTypesEntity;
-import pl.solvd.concerthall.entities.ProgramHasGenreEntity;
+import pl.solvd.concerthall.entities.ProgramHasGenre;
 import pl.solvd.concerthall.utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class ProgramHasGenreDAOImpl extends MySqlDAO implements IProgramHasGenreDAO {
     private static final ConnectionPool instance = ConnectionPool.getInstance();
-    private static Connection connection = instance.getConnection();
+    private static final Connection connection = instance.getConnection();
     private static final String GET_ALL_PROGRAM_HAS_GENRE_QUERY = "SELECT * FROM program_has_genre";
     private static final String GET_PROGRAM_HAS_GENRE_QUERY = "SELECT * FROM program_has_genre WHERE program_id = ?";
     private static final String INSERT_PROGRAM_HAS_GENRE_QUERY = "INSERT INTO program_has_genre (program_id, genre_id) VALUES(?, ?)";
@@ -25,7 +24,7 @@ public class ProgramHasGenreDAOImpl extends MySqlDAO implements IProgramHasGenre
     private static final String DELETE_PROGRAM_HAS_GENRE_QUERY = "DELETE FROM program_has_genre WHERE program_id = ?";
 
     @Override
-    public ProgramHasGenreEntity saveEntity(ProgramHasGenreEntity entity) throws Exception {
+    public ProgramHasGenre addEntity(ProgramHasGenre entity) throws Exception {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_PROGRAM_HAS_GENRE_QUERY)) {
             ps.setLong(1, entity.getProgramId());
             ps.setLong(2, entity.getGenreId());
@@ -43,36 +42,13 @@ public class ProgramHasGenreDAOImpl extends MySqlDAO implements IProgramHasGenre
     }
 
     @Override
-    public void getEntityById(Long authorsId) throws Exception {
-        ProgramHasGenreEntity programHasGenre = new ProgramHasGenreEntity();
-        try (PreparedStatement ps = connection.prepareStatement(GET_PROGRAM_HAS_GENRE_QUERY)) {
-            ps.setLong(1, authorsId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    programHasGenre.setProgramId(rs.getLong(1));
-                    programHasGenre.setGenreId(rs.getLong(2));
-                    System.out.println(programHasGenre.getProgramId() + "," + programHasGenre.getGenreId());
-                }
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    @Override
-    public List<ProgramHasGenreEntity> updateEntity(ProgramHasGenreEntity entity) throws Exception {
-        List<ProgramHasGenreEntity> updatedProgramHasGenre = new ArrayList<>();
+    public List<ProgramHasGenre> updateEntity(ProgramHasGenre entity) throws Exception {
+        List<ProgramHasGenre> updatedProgramHasGenre = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_PROGRAM_HAS_GENRE_QUERY)) {
             ps.setLong(1, entity.getGenreId());
             ps.setLong(2, entity.getProgramId());
             ps.executeUpdate();
-            updatedProgramHasGenre = getAllProgramHasGenre();
+            updatedProgramHasGenre = getAll();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {
@@ -102,14 +78,14 @@ public class ProgramHasGenreDAOImpl extends MySqlDAO implements IProgramHasGenre
     }
 
     @Override
-    public List<ProgramHasGenreEntity> getAllProgramHasGenre() throws Exception {
-        List<ProgramHasGenreEntity> programHasGenre = new ArrayList<>();
+    public List<ProgramHasGenre> getAll() throws Exception {
+        List<ProgramHasGenre> programHasGenre = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(GET_ALL_PROGRAM_HAS_GENRE_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Long programId = rs.getLong("program_id");
                     Long genreId = rs.getLong("genre_id");
-                    programHasGenre.add(new ProgramHasGenreEntity(programId, genreId));
+                    programHasGenre.add(new ProgramHasGenre(programId, genreId));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -120,13 +96,13 @@ public class ProgramHasGenreDAOImpl extends MySqlDAO implements IProgramHasGenre
                     System.out.println(e.getMessage());
                 }
             }
-            return getAllProgramHasGenre();
+            return programHasGenre;
         }
     }
 
     @Override
-    public List<ProgramHasGenreEntity> getAllProgramHasGenreBy (Predicate<ProgramHasGenreEntity> predicate) throws Exception {
-        List<ProgramHasGenreEntity> programHasGenreList = getAllProgramHasGenre();
+    public List<ProgramHasGenre> getAllProgramHasGenreBy(Predicate<ProgramHasGenre> predicate) throws Exception {
+        List<ProgramHasGenre> programHasGenreList = getAll();
         programHasGenreList = programHasGenreList.stream().filter(predicate).collect(Collectors.toList());
         try {
             connection.close();
@@ -134,5 +110,29 @@ public class ProgramHasGenreDAOImpl extends MySqlDAO implements IProgramHasGenre
             System.out.println(e.getMessage());
         }
         return programHasGenreList;
+    }
+
+    @Override
+    public void getEntityByProgramIdAndGenreId(Long programId, Long genreId) throws Exception {
+        ProgramHasGenre programHasGenre = new ProgramHasGenre();
+        try (PreparedStatement ps = connection.prepareStatement(GET_PROGRAM_HAS_GENRE_QUERY)) {
+            ps.setLong(1, programId);
+            ps.setLong(2, genreId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    programHasGenre.setProgramId(rs.getLong(1));
+                    programHasGenre.setGenreId(rs.getLong(2));
+                    System.out.println(programHasGenre.getProgramId() + "," + programHasGenre.getGenreId());
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

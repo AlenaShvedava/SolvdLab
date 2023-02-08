@@ -2,9 +2,8 @@ package pl.solvd.concerthall.dao.impl;
 
 import pl.solvd.concerthall.dao.interfacesDAO.IEventsHasGenreDAO;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.entities.AuthorsEntity;
-import pl.solvd.concerthall.entities.AuthorsHasAuthorTypesEntity;
-import pl.solvd.concerthall.entities.EventsHasGenreEntity;
+import pl.solvd.concerthall.entities.AuthorsHasAuthorTypes;
+import pl.solvd.concerthall.entities.EventsHasGenre;
 import pl.solvd.concerthall.utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class EventsHasGenreDAOImpl extends MySqlDAO implements IEventsHasGenreDAO {
     private static final ConnectionPool instance = ConnectionPool.getInstance();
-    private static Connection connection = instance.getConnection();
+    private static final Connection connection = instance.getConnection();
     private static final String GET_ALL_EVENTS_HAS_GENRE_QUERY = "SELECT * FROM events_has_genre";
     private static final String GET_EVENTS_HAS_GENRE_QUERY = "SELECT * FROM events_has_genre WHERE events_id = ?";
     private static final String INSERT_EVENTS_HAS_GENRE_QUERY = "INSERT INTO events_has_genre (events_id, genre_id) VALUES(?, ?)";
@@ -26,7 +25,7 @@ public class EventsHasGenreDAOImpl extends MySqlDAO implements IEventsHasGenreDA
     private static final String DELETE_EVENTS_HAS_GENRE_QUERY = "DELETE FROM events_has_genre WHERE events_id = ?";
 
     @Override
-    public EventsHasGenreEntity saveEntity(EventsHasGenreEntity entity) throws Exception {
+    public EventsHasGenre addEntity(EventsHasGenre entity) throws Exception {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_EVENTS_HAS_GENRE_QUERY)) {
             ps.setLong(1, entity.getEventsId());
             ps.setLong(2, entity.getGenreId());
@@ -44,8 +43,8 @@ public class EventsHasGenreDAOImpl extends MySqlDAO implements IEventsHasGenreDA
     }
 
     @Override
-    public void getEntityById(Long eventsId) throws Exception {
-        EventsHasGenreEntity eventsHasGenre = new EventsHasGenreEntity();
+    public EventsHasGenre getEntityById(Long eventsId) throws Exception {
+        EventsHasGenre eventsHasGenre = new EventsHasGenre();
         try (PreparedStatement ps = connection.prepareStatement(GET_EVENTS_HAS_GENRE_QUERY)) {
             ps.setLong(1, eventsId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -64,16 +63,17 @@ public class EventsHasGenreDAOImpl extends MySqlDAO implements IEventsHasGenreDA
                 System.out.println(e.getMessage());
             }
         }
+        return eventsHasGenre;
     }
 
     @Override
-    public List<EventsHasGenreEntity> updateEntity(EventsHasGenreEntity entity) throws Exception {
-        List<EventsHasGenreEntity> updatedEventsHasGenre = new ArrayList<>();
+    public List<EventsHasGenre> updateEntity(EventsHasGenre entity) throws Exception {
+        List<EventsHasGenre> updatedEventsHasGenre = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_EVENTS_HAS_GENRE_QUERY)) {
             ps.setLong(1, entity.getEventsId());
             ps.setLong(2, entity.getGenreId());
             ps.executeUpdate();
-            updatedEventsHasGenre = getAllEventsHasGenre();
+            updatedEventsHasGenre = getAll();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {
@@ -103,14 +103,14 @@ public class EventsHasGenreDAOImpl extends MySqlDAO implements IEventsHasGenreDA
     }
 
     @Override
-    public List<EventsHasGenreEntity> getAllEventsHasGenre() throws Exception {
-        List<AuthorsHasAuthorTypesEntity> authorsHasAuthorTypes = new ArrayList<>();
+    public List<EventsHasGenre> getAll() throws Exception {
+        List<AuthorsHasAuthorTypes> authorsHasAuthorTypes = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(GET_ALL_EVENTS_HAS_GENRE_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Long eventsId = rs.getLong("events_id");
                     Long genreId = rs.getLong("genre_id");
-                    authorsHasAuthorTypes.add(new AuthorsHasAuthorTypesEntity(eventsId, genreId));
+                    authorsHasAuthorTypes.add(new AuthorsHasAuthorTypes(eventsId, genreId));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -121,13 +121,13 @@ public class EventsHasGenreDAOImpl extends MySqlDAO implements IEventsHasGenreDA
                     System.out.println(e.getMessage());
                 }
             }
-            return getAllEventsHasGenre();
+            return getAll();
         }
     }
 
     @Override
-    public List<EventsHasGenreEntity> getAllEventsHasGenreBy(Predicate<EventsHasGenreEntity> predicate) throws Exception {
-        List<EventsHasGenreEntity> eventsList = getAllEventsHasGenre();
+    public List<EventsHasGenre> getAllEventsHasGenreBy(Predicate<EventsHasGenre> predicate) throws Exception {
+        List<EventsHasGenre> eventsList = getAll();
         eventsList = eventsList.stream().filter(predicate).collect(Collectors.toList());
         try {
             connection.close();

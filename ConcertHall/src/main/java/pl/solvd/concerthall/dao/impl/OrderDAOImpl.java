@@ -2,8 +2,7 @@ package pl.solvd.concerthall.dao.impl;
 
 import pl.solvd.concerthall.dao.interfacesDAO.IOrderDAO;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.entities.AuthorsEntity;
-import pl.solvd.concerthall.entities.OrderEntity;
+import pl.solvd.concerthall.entities.Order;
 import pl.solvd.concerthall.utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class OrderDAOImpl extends MySqlDAO implements IOrderDAO {
     private static final ConnectionPool instance = ConnectionPool.getInstance();
-    private static Connection connection = instance.getConnection();
+    private static final Connection connection = instance.getConnection();
 
     private static final String GET_ALL_ORDER_QUERY = "SELECT * FROM order";
     private static final String GET_ORDER_QUERY = "SELECT * FROM order WHERE id = ?";
@@ -26,7 +25,7 @@ public class OrderDAOImpl extends MySqlDAO implements IOrderDAO {
     private static final String DELETE_ORDER_QUERY = "DELETE FROM order WHERE id = ?";
 
     @Override
-    public OrderEntity saveEntity(OrderEntity entity) {
+    public Order addEntity(Order entity) {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_ORDER_QUERY)) {
             ps.setLong(1, entity.getCustomerId());
             ps.setLong(2, entity.getPosterId());
@@ -42,8 +41,8 @@ public class OrderDAOImpl extends MySqlDAO implements IOrderDAO {
     }
 
     @Override
-    public List<OrderEntity> getAllOrder() throws Exception {
-        List<OrderEntity> order = new ArrayList<>();
+    public List<Order> getAll() throws Exception {
+        List<Order> order = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(GET_ALL_ORDER_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -52,7 +51,7 @@ public class OrderDAOImpl extends MySqlDAO implements IOrderDAO {
                     Long posterId = rs.getLong("poster_id");
                     Long priceLevelId = rs.getLong("last_name");
                     int numberOfTickets= rs.getInt("number_of_tickets");
-                    order.add(new OrderEntity(id, customerId, posterId, priceLevelId, numberOfTickets));
+                    order.add(new Order(id, customerId, posterId, priceLevelId, numberOfTickets));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -64,16 +63,16 @@ public class OrderDAOImpl extends MySqlDAO implements IOrderDAO {
     }
 
     @Override
-    public List<OrderEntity> getAllOrderBy (Predicate<OrderEntity> predicate) throws Exception {
-        List<OrderEntity> orderList = getAllOrder();
+    public List<Order> getAllOrderBy (Predicate<Order> predicate) throws Exception {
+        List<Order> orderList = getAll();
         orderList = orderList.stream().filter(predicate).collect(Collectors.toList());
         ConnectionPool.close();
         return orderList;
     }
 
     @Override
-    public void getEntityById(Long id) throws Exception {
-        OrderEntity order = new OrderEntity();
+    public Order getEntityById(Long id) throws Exception {
+        Order order = new Order();
         try (PreparedStatement ps = connection.prepareStatement(GET_ORDER_QUERY)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -83,7 +82,7 @@ public class OrderDAOImpl extends MySqlDAO implements IOrderDAO {
                     order.setPosterId(rs.getLong(3));
                     order.setPriceLevelId(rs.getLong(3));
                     order.setNumberOfTickets(rs.getInt(3));
-                    System.out.println(order.getId() + "," + order.getCustomerId() + "," + order.getPosterId() + "," + order.getPriceLevelId() + "," + order.getNumberOfTickets());
+                    System.out.println(Order.getId() + "," + order.getCustomerId() + "," + order.getPosterId() + "," + order.getPriceLevelId() + "," + order.getNumberOfTickets());
                 }
             }
         } catch (Exception e) {
@@ -91,19 +90,20 @@ public class OrderDAOImpl extends MySqlDAO implements IOrderDAO {
         } finally {
             ConnectionPool.close();
         }
+        return order;
     }
 
     @Override
-    public List<OrderEntity> updateEntity(OrderEntity entity) throws Exception {
-        List<OrderEntity> updatedOrder = new ArrayList<>();
+    public List<Order> updateEntity(Order entity) throws Exception {
+        List<Order> updatedOrder = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_ORDER_QUERY)) {
             ps.setLong(1, entity.getCustomerId());
             ps.setLong(2, entity.getPosterId());
             ps.setLong(2, entity.getPriceLevelId());
             ps.setInt(2, entity.getNumberOfTickets());
-            ps.setLong(3, entity.getId());
+            ps.setLong(3, Order.getId());
             ps.executeUpdate();
-            updatedOrder = getAllOrder();
+            updatedOrder = getAll();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {

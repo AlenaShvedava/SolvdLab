@@ -2,17 +2,17 @@ package pl.solvd.concerthall.entities;
 
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
 
-public class OrderEntity extends MySqlDAO {
-    private Long id;
+public class Order extends MySqlDAO {
+    private static Long id;
     private Long customerId;
     private Long posterId;
     private Long priceLevelId;
     private int numberOfTickets;
 
-    public OrderEntity() {
+    public Order() {
     }
 
-    public OrderEntity(Long id, Long customerId, Long posterId, Long priceLevelId, int numberOfTickets) {
+    public Order(Long id, Long customerId, Long posterId, Long priceLevelId, int numberOfTickets) {
         this.id = id;
         this.customerId = customerId;
         this.posterId = posterId;
@@ -20,7 +20,7 @@ public class OrderEntity extends MySqlDAO {
         this.numberOfTickets = numberOfTickets;
     }
 
-    public Long getId() {
+    public static Long getId() {
         return id;
     }
 

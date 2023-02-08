@@ -2,25 +2,30 @@ package pl.solvd.concerthall.entities;
 
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
 
-public class ConcertHallsEntity extends MySqlDAO {
-    private Long id;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ConcertHalls extends MySqlDAO {
+    private static Long id;
     private String name;
+    private String phone;
     private String address;
     private int sumNumberOfSeats;
-    private String phone;
+    List<Program> program;
 
-    public ConcertHallsEntity() {
+    public ConcertHalls() {
     }
 
-    public ConcertHallsEntity(Long id, String name, String address, int sumNumberOfSeats, String phone) {
+    public ConcertHalls(Long id, String name, String address, String phone, int sumNumberOfSeats) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.sumNumberOfSeats = sumNumberOfSeats;
         this.phone = phone;
+        program = new ArrayList<>();
     }
 
-    public Long getId() {
+    public static Long getId() {
         return id;
     }
 
@@ -60,15 +65,19 @@ public class ConcertHallsEntity extends MySqlDAO {
         this.phone = phone;
     }
 
+    public List<Program> getProgram() {
+        return program;
+    }
+
+    public void setProgram(List<Program> program) {
+        this.program = program;
+    }
+
     @Override
     public String toString() {
-        return "ConcertHalls{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", sumNumberOfSeats=" + sumNumberOfSeats +
-                ", phone='" + phone + '\'' +
-                '}';
+        return "\nConcert Hall: " + name + "\n" +
+                "Address: " + address + "\n" +
+                "Phone: " + phone + "\n" +
+                "=====================================";
     }
 }
-

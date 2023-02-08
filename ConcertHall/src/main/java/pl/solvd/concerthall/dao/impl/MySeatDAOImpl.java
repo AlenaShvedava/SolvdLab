@@ -2,8 +2,7 @@ package pl.solvd.concerthall.dao.impl;
 
 import pl.solvd.concerthall.dao.interfacesDAO.IMySeatDAO;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.entities.AuthorsEntity;
-import pl.solvd.concerthall.entities.MySeatEntity;
+import pl.solvd.concerthall.entities.MySeat;
 import pl.solvd.concerthall.utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class MySeatDAOImpl extends MySqlDAO implements IMySeatDAO {
     private static final ConnectionPool instance = ConnectionPool.getInstance();
-    private static Connection connection = instance.getConnection();
+    private static final Connection connection = instance.getConnection();
 
     private static final String GET_ALL_MY_SEAT_QUERY = "SELECT * FROM my_seat";
     private static final String GET_MY_SEAT_QUERY = "SELECT * FROM my_seat WHERE id = ?";
@@ -26,7 +25,7 @@ public class MySeatDAOImpl extends MySqlDAO implements IMySeatDAO {
     private static final String DELETE_MY_SEAT_QUERY = "DELETE FROM my_seat WHERE id = ?";
 
     @Override
-    public MySeatEntity saveEntity(MySeatEntity entity) {
+    public MySeat addEntity(MySeat entity) {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_MY_SEAT_QUERY)) {
             ps.setInt(1, entity.getRowNumber());
             ps.setInt(2, entity.getSeatNumber());
@@ -41,8 +40,8 @@ public class MySeatDAOImpl extends MySqlDAO implements IMySeatDAO {
     }
 
     @Override
-    public List<MySeatEntity> getAllMySeat() throws Exception {
-        List<MySeatEntity> mySeat = new ArrayList<>();
+    public List<MySeat> getAll() throws Exception {
+        List<MySeat> mySeat = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(GET_ALL_MY_SEAT_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -50,7 +49,7 @@ public class MySeatDAOImpl extends MySqlDAO implements IMySeatDAO {
                     int rowNumber = rs.getInt("row_number");
                     int seatNumber = rs.getInt("seat_number");
                     int numOfSeatsId = rs.getInt("num_of_seats_id");
-                    mySeat.add(new MySeatEntity (id, rowNumber, seatNumber, numOfSeatsId));
+                    mySeat.add(new MySeat(id, rowNumber, seatNumber, numOfSeatsId));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -62,16 +61,16 @@ public class MySeatDAOImpl extends MySqlDAO implements IMySeatDAO {
     }
 
     @Override
-    public List<MySeatEntity> getAllMySeatBy (Predicate<MySeatEntity> predicate) throws Exception {
-        List<MySeatEntity> mySeatList = getAllMySeat();
+    public List<MySeat> getAllMySeatBy(Predicate<MySeat> predicate) throws Exception {
+        List<MySeat> mySeatList = getAll();
         mySeatList = mySeatList.stream().filter(predicate).collect(Collectors.toList());
         ConnectionPool.close();
         return mySeatList;
     }
 
     @Override
-    public void getEntityById(Long id) throws Exception {
-        MySeatEntity mySeat = new MySeatEntity();
+    public MySeat getEntityById(Long id) throws Exception {
+        MySeat mySeat = new MySeat();
         try (PreparedStatement ps = connection.prepareStatement(GET_MY_SEAT_QUERY)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -80,7 +79,7 @@ public class MySeatDAOImpl extends MySqlDAO implements IMySeatDAO {
                     mySeat.setRowNumber(rs.getInt(2));
                     mySeat.setSeatNumber(rs.getInt(3));
                     mySeat.setNumOfSeatsId(rs.getInt(4));
-                    System.out.println(mySeat.getId() + "," + mySeat.getRowNumber() + "," + mySeat.getSeatNumber() + "," + mySeat.getNumOfSeatsId());
+                    System.out.println(MySeat.getId() + "," + mySeat.getRowNumber() + "," + mySeat.getSeatNumber() + "," + mySeat.getNumOfSeatsId());
                 }
             }
         } catch (Exception e) {
@@ -88,18 +87,19 @@ public class MySeatDAOImpl extends MySqlDAO implements IMySeatDAO {
         } finally {
             ConnectionPool.close();
         }
+        return mySeat;
     }
 
     @Override
-    public List<MySeatEntity> updateEntity(MySeatEntity entity) throws Exception {
-        List<MySeatEntity> updatedMySeat = new ArrayList<>();
+    public List<MySeat> updateEntity(MySeat entity) throws Exception {
+        List<MySeat> updatedMySeat = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_MY_SEAT_QUERY)) {
             ps.setInt(1, entity.getRowNumber());
             ps.setInt(2, entity.getSeatNumber());
             ps.setInt(3, entity.getNumOfSeatsId());
-            ps.setLong(4, entity.getId());
+            ps.setLong(4, MySeat.getId());
             ps.executeUpdate();
-            updatedMySeat = getAllMySeat();
+            updatedMySeat = getAll();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {

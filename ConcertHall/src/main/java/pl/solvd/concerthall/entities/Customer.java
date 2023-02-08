@@ -2,18 +2,22 @@ package pl.solvd.concerthall.entities;
 
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
 
-public class AuthorsEntity extends MySqlDAO {
+public class Customer extends MySqlDAO {
     private static Long id;
     private String firstName;
     private String lastName;
+    private String email;
+    private int balance;
 
-    public AuthorsEntity() {
+    public Customer() {
     }
 
-    public AuthorsEntity(Long id, String firstName, String lastName) {
+    public Customer(Long id, String firstName, String lastName, String email, int balance) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
+        this.balance = balance;
     }
 
     public static Long getId() {
@@ -40,12 +44,30 @@ public class AuthorsEntity extends MySqlDAO {
         this.lastName = lastName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
+
     @Override
     public String toString() {
-        return "Authors{" +
+        return "Customer{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", balance=" + balance +
                 '}';
     }
 }

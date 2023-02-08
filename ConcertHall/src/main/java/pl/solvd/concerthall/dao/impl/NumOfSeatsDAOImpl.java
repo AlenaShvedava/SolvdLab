@@ -2,8 +2,7 @@ package pl.solvd.concerthall.dao.impl;
 
 import pl.solvd.concerthall.dao.interfacesDAO.INumOfSeatsDAO;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.entities.AuthorsEntity;
-import pl.solvd.concerthall.entities.NumOfSeatsEntity;
+import pl.solvd.concerthall.entities.NumOfSeats;
 import pl.solvd.concerthall.utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class NumOfSeatsDAOImpl extends MySqlDAO implements INumOfSeatsDAO {
     private static final ConnectionPool instance = ConnectionPool.getInstance();
-    private static Connection connection = instance.getConnection();
+    private static final Connection connection = instance.getConnection();
 
     private static final String GET_ALL_NUM_OF_SEATS_QUERY = "SELECT * FROM num_of_seats";
     private static final String GET_NUM_OF_SEATS_QUERY = "SELECT * FROM num_of_seats WHERE id = ?";
@@ -26,7 +25,7 @@ public class NumOfSeatsDAOImpl extends MySqlDAO implements INumOfSeatsDAO {
     private static final String DELETE_NUM_OF_SEATS_QUERY = "DELETE FROM num_of_seats WHERE id = ?";
 
     @Override
-    public NumOfSeatsEntity saveEntity(NumOfSeatsEntity entity) {
+    public NumOfSeats addEntity(NumOfSeats entity) {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_NUM_OF_SEATS_QUERY)) {
             ps.setLong(1, entity.getConcertHallsId());
             ps.setLong(2, entity.getPriceLevelId());
@@ -41,8 +40,8 @@ public class NumOfSeatsDAOImpl extends MySqlDAO implements INumOfSeatsDAO {
     }
 
     @Override
-    public List<NumOfSeatsEntity> getAllNumOfSeats() throws Exception {
-        List<NumOfSeatsEntity> numOfSeats = new ArrayList<>();
+    public List<NumOfSeats> getAll() throws Exception {
+        List<NumOfSeats> numOfSeats = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(GET_ALL_NUM_OF_SEATS_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -50,7 +49,7 @@ public class NumOfSeatsDAOImpl extends MySqlDAO implements INumOfSeatsDAO {
                     Long concertHallsId = rs.getLong("concerthalls_id");
                     Long priceLevelId = rs.getLong("price_level_id");
                     int amountOfSeats = rs.getInt("amount_of_seats");
-                    numOfSeats.add(new NumOfSeatsEntity(id, concertHallsId, priceLevelId, amountOfSeats));
+                    numOfSeats.add(new NumOfSeats(id, concertHallsId, priceLevelId, amountOfSeats));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -62,16 +61,16 @@ public class NumOfSeatsDAOImpl extends MySqlDAO implements INumOfSeatsDAO {
     }
 
     @Override
-    public List<NumOfSeatsEntity> getAllNumOfSeatsBy(Predicate<NumOfSeatsEntity> predicate) throws Exception {
-        List<NumOfSeatsEntity> numOfSeatsList = getAllNumOfSeats();
+    public List<NumOfSeats> getAllNumOfSeatsBy(Predicate<NumOfSeats> predicate) throws Exception {
+        List<NumOfSeats> numOfSeatsList = getAll();
         numOfSeatsList = numOfSeatsList.stream().filter(predicate).collect(Collectors.toList());
         ConnectionPool.close();
         return numOfSeatsList;
     }
 
     @Override
-    public void getEntityById(Long id) throws Exception {
-        NumOfSeatsEntity numOfSeats = new NumOfSeatsEntity();
+    public NumOfSeats getEntityById(Long id) throws Exception {
+        NumOfSeats numOfSeats = new NumOfSeats();
         try (PreparedStatement ps = connection.prepareStatement(GET_NUM_OF_SEATS_QUERY)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -80,7 +79,7 @@ public class NumOfSeatsDAOImpl extends MySqlDAO implements INumOfSeatsDAO {
                     numOfSeats.setConcertHallsId(rs.getLong(2));
                     numOfSeats.setPriceLevelId(rs.getLong(3));
                     numOfSeats.setAmountOfSeats(rs.getInt(4));
-                    System.out.println(numOfSeats.getId() + "," + numOfSeats.getConcertHallsId() + "," + numOfSeats.getPriceLevelId() + "," + numOfSeats.getAmountOfSeats());
+                    System.out.println(NumOfSeats.getId() + "," + numOfSeats.getConcertHallsId() + "," + numOfSeats.getPriceLevelId() + "," + numOfSeats.getAmountOfSeats());
                 }
             }
         } catch (Exception e) {
@@ -88,18 +87,19 @@ public class NumOfSeatsDAOImpl extends MySqlDAO implements INumOfSeatsDAO {
         } finally {
             ConnectionPool.close();
         }
+        return numOfSeats;
     }
 
     @Override
-    public List<NumOfSeatsEntity> updateEntity(NumOfSeatsEntity entity) throws Exception {
-        List<NumOfSeatsEntity> updatedNumOfSeats = new ArrayList<>();
+    public List<NumOfSeats> updateEntity(NumOfSeats entity) throws Exception {
+        List<NumOfSeats> updatedNumOfSeats = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_NUM_OF_SEATS_QUERY)) {
             ps.setLong(1, entity.getConcertHallsId());
             ps.setLong(2, entity.getPriceLevelId());
             ps.setInt(3, entity.getAmountOfSeats());
-            ps.setLong(4, entity.getId());
+            ps.setLong(4, NumOfSeats.getId());
             ps.executeUpdate();
-            updatedNumOfSeats = getAllNumOfSeats();
+            updatedNumOfSeats = getAll();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {

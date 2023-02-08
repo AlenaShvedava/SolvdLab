@@ -3,11 +3,10 @@ package pl.solvd.concert.models;
 import pl.solvd.concerthall.models.Poster;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
-@XmlRootElement(name = "concerthall")
+
 public class ConcertHall {
     private List <Poster> posters = new ArrayList<>();
 

@@ -2,25 +2,30 @@ package pl.solvd.concerthall.entities;
 
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
 
-public class PosterEntity extends MySqlDAO {
-    private Long id;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Poster extends MySqlDAO {
+    private static Long id;
     private int year;
     private int month;
     private int day;
     private double time;
+    List<Program> program;
 
-    public PosterEntity() {
+    public Poster() {
     }
 
-    public PosterEntity(Long id, int year, int month, int day, double time) {
+    public Poster(Long id, int year, int month, int day, double time) {
         this.id = id;
         this.year = year;
         this.month = month;
         this.day = day;
         this.time = time;
+        program = new ArrayList<>();
     }
 
-    public Long getId() {
+    public static Long getId() {
         return id;
     }
 
@@ -60,14 +65,19 @@ public class PosterEntity extends MySqlDAO {
         this.time = time;
     }
 
+    public List<Program> getProgram() {
+        return program;
+    }
+
+    public void setProgram(List<Program> program) {
+        this.program = program;
+    }
+
     @Override
     public String toString() {
-        return "Poster{" +
-                "id=" + id +
-                ", year=" + year +
-                ", month=" + month +
-                ", day=" + day +
-                ", time=" + time +
-                '}';
+        return "Poster №" + id + ": \n" +
+                "Date: " + year + "/" + month + "/" + day + "\n" +
+                "Time: " + String.format("%.2f", time) + "\n" +
+                program.toString().replace("[", "").replace("]", "").replace(",", "");
     }
 }

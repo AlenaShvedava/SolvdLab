@@ -2,14 +2,14 @@ package pl.solvd.concerthall.entities;
 
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
 
-public class EventsEntity extends MySqlDAO {
+public class Events extends MySqlDAO {
     private Long id;
     private String category;
 
-    public EventsEntity() {
+    public Events() {
     }
 
-    public EventsEntity(Long id, String category) {
+    public Events(Long id, String category) {
         this.id = id;
         this.category = category;
     }

@@ -2,7 +2,7 @@ package pl.solvd.concerthall.dao.impl;
 
 import pl.solvd.concerthall.dao.interfacesDAO.IAuthorsHasAuthorTypesDAO;
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.entities.AuthorsHasAuthorTypesEntity;
+import pl.solvd.concerthall.entities.AuthorsHasAuthorTypes;
 import pl.solvd.concerthall.utils.ConnectionPool;
 
 import java.sql.Connection;
@@ -16,15 +16,15 @@ import java.util.stream.Collectors;
 
 public class AuthorsHasAuthorTypesDAOImpl extends MySqlDAO implements IAuthorsHasAuthorTypesDAO {
     private static final ConnectionPool instance = ConnectionPool.getInstance();
-    private static Connection connection = instance.getConnection();
+    private static final Connection connection = instance.getConnection();
     private static final String GET_ALL_AUTHORS_HAS_AUTHOR_TYPES_QUERY = "SELECT * FROM authors_has_author_types";
-    private static final String GET_AUTHORS_HAS_AUTHOR_TYPES_QUERY = "SELECT * FROM authors_has_author_types WHERE authors_id = ?";
+    private static final String GET_AUTHORS_HAS_AUTHOR_TYPES_QUERY = "SELECT authors_id, author_types_id FROM authors_has_author_types WHERE authors_id = ? AND author_types_id = ?";
     private static final String INSERT_AUTHORS_HAS_AUTHOR_TYPES_QUERY = "INSERT INTO authors_has_author_types(authors_id, author_types_id) VALUES(?, ?)";
-    private static final String UPDATE_AUTHORS_HAS_AUTHOR_TYPES_QUERY = "UPDATE authors_has_author_types SET author_types_id = ? WHERE authors_id = ?";
-    private static final String DELETE_AUTHORS_HAS_AUTHOR_TYPES_QUERY = "DELETE FROM authors_has_author_types WHERE authors_id = ?";
+    private static final String UPDATE_AUTHORS_HAS_AUTHOR_TYPES_QUERY = "UPDATE authors_has_author_types SET author_id = ?, author_types_id = ?";
+    private static final String DELETE_AUTHORS_HAS_AUTHOR_TYPES_QUERY = "DELETE FROM authors_has_author_types WHERE authors_id = ? AND author_types_id = ?";
 
     @Override
-    public AuthorsHasAuthorTypesEntity saveEntity(AuthorsHasAuthorTypesEntity entity) throws Exception {
+    public AuthorsHasAuthorTypes addEntity(AuthorsHasAuthorTypes entity) throws Exception {
         try (PreparedStatement ps = connection.prepareStatement(INSERT_AUTHORS_HAS_AUTHOR_TYPES_QUERY)) {
             ps.setLong(1, entity.getAuthorsId());
             ps.setLong(2, entity.getAuthorTypesId());
@@ -42,10 +42,11 @@ public class AuthorsHasAuthorTypesDAOImpl extends MySqlDAO implements IAuthorsHa
     }
 
     @Override
-    public void getEntityById(Long authorsId) throws Exception {
-        AuthorsHasAuthorTypesEntity authorsHasAuthorTypes = new AuthorsHasAuthorTypesEntity();
+    public void getEntityByAuthorsIdAndAuthorTypesId(Long authorsId, Long authorTypesId) {
+        AuthorsHasAuthorTypes authorsHasAuthorTypes = new AuthorsHasAuthorTypes();
         try (PreparedStatement ps = connection.prepareStatement(GET_AUTHORS_HAS_AUTHOR_TYPES_QUERY)) {
             ps.setLong(1, authorsId);
+            ps.setLong(2, authorTypesId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     authorsHasAuthorTypes.setAuthorsId(rs.getLong(1));
@@ -65,13 +66,13 @@ public class AuthorsHasAuthorTypesDAOImpl extends MySqlDAO implements IAuthorsHa
     }
 
     @Override
-    public List<AuthorsHasAuthorTypesEntity> updateEntity(AuthorsHasAuthorTypesEntity entity) throws Exception {
-        List<AuthorsHasAuthorTypesEntity> updatedAuthors = new ArrayList<>();
+    public List<AuthorsHasAuthorTypes> updateEntity(AuthorsHasAuthorTypes entity) throws Exception {
+        List<AuthorsHasAuthorTypes> updatedAuthors = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(UPDATE_AUTHORS_HAS_AUTHOR_TYPES_QUERY)) {
-            ps.setLong(1, entity.getAuthorTypesId());
-            ps.setLong(2, entity.getAuthorsId());
+            ps.setLong(1, entity.getAuthorsId());
+            ps.setLong(2, entity.getAuthorTypesId());
             ps.executeUpdate();
-            updatedAuthors = getAllAuthorsHasAuthorTypes();
+            updatedAuthors = getAll();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {
@@ -101,14 +102,14 @@ public class AuthorsHasAuthorTypesDAOImpl extends MySqlDAO implements IAuthorsHa
     }
 
     @Override
-    public List<AuthorsHasAuthorTypesEntity> getAllAuthorsHasAuthorTypes() throws Exception {
-        List<AuthorsHasAuthorTypesEntity> authorsHasAuthorTypes = new ArrayList<>();
+    public List<AuthorsHasAuthorTypes> getAll() throws Exception {
+        List<AuthorsHasAuthorTypes> authorsHasAuthorTypes = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(GET_ALL_AUTHORS_HAS_AUTHOR_TYPES_QUERY)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Long authorsId = rs.getLong("authors_id");
                     Long authorTypeId = rs.getLong("author_type_id");
-                    authorsHasAuthorTypes.add(new AuthorsHasAuthorTypesEntity(authorsId, authorTypeId));
+                    authorsHasAuthorTypes.add(new AuthorsHasAuthorTypes(authorsId, authorTypeId));
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -119,13 +120,13 @@ public class AuthorsHasAuthorTypesDAOImpl extends MySqlDAO implements IAuthorsHa
                     System.out.println(e.getMessage());
                 }
             }
-            return getAllAuthorsHasAuthorTypes();
+            return authorsHasAuthorTypes;
         }
     }
 
     @Override
-    public List<AuthorsHasAuthorTypesEntity> getAllAuthorsHasAuthorTypesBy(Predicate<AuthorsHasAuthorTypesEntity> predicate) throws Exception {
-        List<AuthorsHasAuthorTypesEntity> authorsList = getAllAuthorsHasAuthorTypes();
+    public List<AuthorsHasAuthorTypes> getAllAuthorsHasAuthorTypesBy(Predicate<AuthorsHasAuthorTypes> predicate) throws Exception {
+        List<AuthorsHasAuthorTypes> authorsList = getAll();
         authorsList = authorsList.stream().filter(predicate).collect(Collectors.toList());
         try {
             connection.close();
