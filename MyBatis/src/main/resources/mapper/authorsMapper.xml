@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+<mapper namespace="pl.solvd.concerthall.dao.interfacesDAO.IAuthorsDAO">
+    <sql id="body">
+        a.id as author_id,
+        a.firstName as author_first_name,
+        a.lastName as author_last_name
+    </sql>
+    <select id="getAll" resultMap="authorsResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        Authors a
+    </select>
+    <insert id="addEntity" useGeneratedKeys="true"
+        keyProperty="id">
+        insert into Authors (id, firstName, lastName)
+        values (#{id},#{firstName},#{lastName})
+    </insert>
+    <update id="updateEntity">
+        update Authors set
+        firstName = #{username},
+        lastName = #{password}
+        where id = #{id}
+    </update>
+    <delete id="deleteEntity">
+        delete from Authors where id = #{id}
+    </delete>
+    <select id="getEntityById" resultMap="authorsResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        Authors a
+        WHERE a.id = #{id}
+    </select>
+    <select id="findAuthorsByAuthorTypesId" resultMap="authorsResultMap">
+        SELECT
+        a.id as author_id,
+        a.firstName as author_first_name,
+        a.lastName as author_last_name
+        <include refid="pl.solvd.concerthall.dao.interfacesDAO.IAuthorTypesDAO.body"/>
+        FROM
+        Authors a
+        LEFT JOIN AuthorHasAuthorTypes AS at
+        ON a.id = at.authorsId
+        WHERE t.id = #{id}
+    </select>
+    <select id="findAuthorsByCompositionId" resultMap="authorsResultMap">
+        SELECT
+        a.id as author_id,
+        a.firstName as author_first_name,
+        a.lastName as author_last_name
+        <include refid="pl.solvd.concerthall.dao.interfacesDAO.ICompositionDAO.body"/>
+        FROM
+        Authors a
+        LEFT JOIN CompositionHasAuthors AS ca
+        ON a.id = ca.authorsId
+        WHERE c.id = #{id}
+    </select>
+    <resultMap id="authorsResultMap" type="pl.solvd.concerthall.binary.Authors" autoMapping="false">
+        <id column="author_id" property="id"/>
+        <result column="author_first_name" property="firstName"/>
+        <result column="author_last_name" property="lastName"/>
+        <collection property="authorTypes" resultMap="pl.solvd.concerthall.binary.IAuthorTypesDAO.authorTypesResultMap"/>
+        <collection property="composition" resultMap="pl.solvd.concerthall.binary.ICompositionDAO.compositionResultMap"/>
+    </resultMap>
+</mapper>

@@ -1,37 +1,36 @@
-package pl.solvd.concerthall.models;
+package pl.solvd.concerthall.binary;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import pl.solvd.concerthall.dao.mysql.MySqlDAO;
+
+import java.util.ArrayList;
 import java.util.List;
 
-@XmlRootElement(name = "authors")
-public class Authors {
-    private Long id;
-    private List <AuthorTypes> authorTypes;
+public class Authors extends MySqlDAO {
+    private static Long id;
+    private List<AuthorTypes> authorTypes;
     private String firstName;
     private String lastName;
+    List <Composition> composition;
 
     public Authors() {
     }
 
-    public Authors(Long id, List <AuthorTypes> authorTypes, String firstName, String lastName) {
+    public Authors(Long id, String firstName, String lastName) {
+        authorTypes = new ArrayList<>();
+        composition = new ArrayList<>();
         this.id = id;
-        this.authorTypes = authorTypes;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    @XmlAttribute
-    public Long getId() {
+    public static Long getId() {
         return id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        Authors.id = id;
     }
 
-    @XmlElement (name = "authortypes")
     public List<AuthorTypes> getAuthorTypes() {
         return authorTypes;
     }
@@ -40,7 +39,6 @@ public class Authors {
         this.authorTypes = authorTypes;
     }
 
-    @XmlElement(name = "firstname")
     public String getFirstName() {
         return firstName;
     }
@@ -49,7 +47,6 @@ public class Authors {
         this.firstName = firstName;
     }
 
-    @XmlElement(name = "lastname")
     public String getLastName() {
         return lastName;
     }
@@ -58,9 +55,17 @@ public class Authors {
         this.lastName = lastName;
     }
 
+    public List<Composition> getComposition() {
+        return composition;
+    }
+
+    public void setComposition(List<Composition> composition) {
+        this.composition = composition;
+    }
+
     @Override
     public String toString() {
-        return  "\nAuthor Type: " + authorTypes +
+        return "\nAuthor Type: " + authorTypes +
                 "First name: " + firstName + "\n" +
                 "Last name: " + lastName + "\n" +
                 "-------------------------------------";

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+<mapper namespace="pl.solvd.concerthall.dao.interfacesDAO.IAuthorTypesDAO">
+    <sql id="body">
+        t.id as author_type_id,
+        t.type as author_type
+    </sql>
+    <select id="getAll" resultMap="authorTypesResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        AuthorTypes t
+    </select>
+    <insert id="addEntity" useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO AuthorTypes (id,type)
+        VALUES (#{id}, #{type})
+    </insert>
+    <update id="updateEntity">
+        UPDATE AuthorTypes SET
+        type = #{type},
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteEntity">
+        DELETE FROM AuthorTypes WHERE id = #{id}
+    </delete>
+    <select id="getEntityById" resultMap="authorTypesResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        AuthorTypes t
+        WHERE t.id = #{id}
+    </select>
+    <select id="findAuthorsTypesByAuthorsId" resultMap="authorTypesResultMap">
+        SELECT
+        t.id as author_types_id,
+        t.type as author_types_type,
+        <include refid="pl.solvd.concerthall.dao.interfacesDAO.IAuthorsDAO.body"/>
+        FROM
+        AuthorTypes t
+        LEFT JOIN AuthorHasAuthorTypes AS at
+        ON t.id = at.authorTypesId
+        WHERE a.id = #{id}
+    </select>
+    <resultMap id="authorTypesResultMap" type="pl.solvd.concerthall.binary.AuthorTypes" autoMapping="false">
+        <id column="author_types_id" property="id"/>
+        <result column="author_types_type" property="type"/>
+        <collection property="authors"
+                    resultMap="pl.solvd.concerthall.binary.IAuthorsDAO.authorsResultMap"/>
+    </resultMap>
+</mapper>

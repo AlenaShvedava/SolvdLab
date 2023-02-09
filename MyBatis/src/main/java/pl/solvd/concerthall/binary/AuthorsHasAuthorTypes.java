@@ -1,8 +1,8 @@
-package pl.solvd.concerthall.models;
+package pl.solvd.concerthall.binary;
 
 import pl.solvd.concerthall.dao.mysql.MySqlDAO;
 
-public class AuthorsHasAuthorTypes {
+public class AuthorsHasAuthorTypes extends MySqlDAO {
     private Long authorsId;
     private Long authorTypesId;
 
