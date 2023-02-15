@@ -1,8 +1,8 @@
-package pl.solvd.concerthall.binary;
+package pl.solvd.concerthalls.binary;
 
-import pl.solvd.concerthall.dao.mysql.MySqlDAO;
+import java.util.Objects;
 
-public class AuthorsHasAuthorTypes extends MySqlDAO {
+public class AuthorsHasAuthorTypes {
     private Long authorsId;
     private Long authorTypesId;
 
@@ -28,6 +28,19 @@ public class AuthorsHasAuthorTypes extends MySqlDAO {
 
     public void setAuthorTypesId(Long authorTypesId) {
         this.authorTypesId = authorTypesId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuthorsHasAuthorTypes that = (AuthorsHasAuthorTypes) o;
+        return Objects.equals(authorsId, that.authorsId) && Objects.equals(authorTypesId, that.authorTypesId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(authorsId, authorTypesId);
     }
 
     @Override

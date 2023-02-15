@@ -1,7 +1,7 @@
-package pl.solvd.concerthall.dao.interfacesDAO;
+package pl.solvd.concerthalls.DAO.interfaces;
 
-import pl.solvd.concerthall.dao.IBaseDAO;
-import pl.solvd.concerthall.entities.Authors;
+import pl.solvd.concerthalls.DAO.IBaseDAO;
+import pl.solvd.concerthalls.binary.Authors;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,7 +12,7 @@ public interface IAuthorsDAO extends IBaseDAO<Authors, Long> {
 
     Authors getEntityById(Long id) throws Exception;
 
-    List<Authors> findAuthorsByAuthorTypesId(Long authorTypesId) throws SQLException;
+    void findAuthorsByAuthorTypesId(Long authorTypesId) throws SQLException;
 
     List<Authors> findAuthorsByCompositionId(Long compositionId) throws SQLException;
 }

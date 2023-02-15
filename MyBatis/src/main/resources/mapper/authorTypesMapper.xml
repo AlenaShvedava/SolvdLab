@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
-<mapper namespace="pl.solvd.concerthall.dao.interfacesDAO.IAuthorTypesDAO">
+<mapper namespace="pl.solvd.concerthalls.DAO.interfaces.IAuthorTypesDAO">
     <sql id="body">
         t.id as author_type_id,
         t.type as author_type
@@ -36,17 +36,17 @@
         SELECT
         t.id as author_types_id,
         t.type as author_types_type,
-        <include refid="pl.solvd.concerthall.dao.interfacesDAO.IAuthorsDAO.body"/>
+        <include refid="pl.solvd.concerthalls.DAO.interfaces.IAuthorsDAO.body"/>
         FROM
         AuthorTypes t
         LEFT JOIN AuthorHasAuthorTypes AS at
         ON t.id = at.authorTypesId
         WHERE a.id = #{id}
     </select>
-    <resultMap id="authorTypesResultMap" type="pl.solvd.concerthall.binary.AuthorTypes" autoMapping="false">
+    <resultMap id="authorTypesResultMap" type="pl.solvd.concerthalls.binary.AuthorTypes" autoMapping="false">
         <id column="author_types_id" property="id"/>
         <result column="author_types_type" property="type"/>
         <collection property="authors"
-                    resultMap="pl.solvd.concerthall.binary.IAuthorsDAO.authorsResultMap"/>
+                    resultMap="pl.solvd.concerthalls.DAO.interfaces.IAuthorsDAO.authorsResultMap"/>
     </resultMap>
 </mapper>

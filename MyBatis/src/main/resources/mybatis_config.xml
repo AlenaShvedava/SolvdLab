@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <properties resource="ConcertHall/src/main/resources/mysqlcreds.properties"/>
+    <properties resource="mysqlcreds.properties"/>
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC">
@@ -17,7 +17,7 @@
         </environment>
     </environments>
     <mappers>
-        <mapper resource="db/mapper/user-mapper.xml"/>
-        <mapper resource="db/mapper/car-mapper.xml"/>
+        <mapper resource="mapper/authorsMapper.xml"/>
+        <mapper resource="mapper/authorTypesMapper.xml"/>
     </mappers>
 </configuration>

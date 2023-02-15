@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
-<mapper namespace="pl.solvd.concerthall.dao.interfacesDAO.IAuthorsDAO">
+<mapper namespace="pl.solvd.concerthalls.DAO.interfaces.IAuthorsDAO">
     <sql id="body">
         a.id as author_id,
         a.firstName as author_first_name,
@@ -39,30 +39,30 @@
         a.id as author_id,
         a.firstName as author_first_name,
         a.lastName as author_last_name
-        <include refid="pl.solvd.concerthall.dao.interfacesDAO.IAuthorTypesDAO.body"/>
+        <include refid="pl.solvd.concerthalls.DAO.interfaces.IAuthorTypesDAO.body"/>
         FROM
         Authors a
         LEFT JOIN AuthorHasAuthorTypes AS at
         ON a.id = at.authorsId
         WHERE t.id = #{id}
     </select>
-    <select id="findAuthorsByCompositionId" resultMap="authorsResultMap">
-        SELECT
-        a.id as author_id,
-        a.firstName as author_first_name,
-        a.lastName as author_last_name
-        <include refid="pl.solvd.concerthall.dao.interfacesDAO.ICompositionDAO.body"/>
-        FROM
-        Authors a
-        LEFT JOIN CompositionHasAuthors AS ca
-        ON a.id = ca.authorsId
-        WHERE c.id = #{id}
-    </select>
-    <resultMap id="authorsResultMap" type="pl.solvd.concerthall.binary.Authors" autoMapping="false">
+<!--    <select id="findAuthorsByCompositionId" resultMap="authorsResultMap">-->
+<!--        SELECT-->
+<!--        a.id as author_id,-->
+<!--        a.firstName as author_first_name,-->
+<!--        a.lastName as author_last_name-->
+<!--        <include refid="pl.solvd.concerthalls.dao.interfacesDAO.ICompositionDAO.body"/>-->
+<!--        FROM-->
+<!--        Authors a-->
+<!--        LEFT JOIN CompositionHasAuthors AS ca-->
+<!--        ON a.id = ca.authorsId-->
+<!--        WHERE c.id = #{id}-->
+<!--    </select>-->
+    <resultMap id="authorsResultMap" type="pl.solvd.concerthalls.binary.Authors" autoMapping="false">
         <id column="author_id" property="id"/>
         <result column="author_first_name" property="firstName"/>
         <result column="author_last_name" property="lastName"/>
-        <collection property="authorTypes" resultMap="pl.solvd.concerthall.binary.IAuthorTypesDAO.authorTypesResultMap"/>
-        <collection property="composition" resultMap="pl.solvd.concerthall.binary.ICompositionDAO.compositionResultMap"/>
+        <collection property="authorTypes" resultMap="pl.solvd.concerthalls.DAO.interfaces.IAuthorTypesDAO.authorTypesResultMap"/>
+<!--        <collection property="composition" resultMap="pl.solvd.concerthalls.binary.ICompositionDAO.compositionResultMap"/>-->
     </resultMap>
 </mapper>

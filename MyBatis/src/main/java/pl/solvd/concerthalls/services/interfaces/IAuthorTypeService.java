@@ -1,6 +1,6 @@
-package pl.solvd.concerthall.services.interfaces;
+package pl.solvd.concerthalls.services.interfaces;
 
-import pl.solvd.concerthall.binary.AuthorTypes;
+import pl.solvd.concerthalls.binary.AuthorTypes;
 
 import java.sql.SQLException;
 import java.util.List;

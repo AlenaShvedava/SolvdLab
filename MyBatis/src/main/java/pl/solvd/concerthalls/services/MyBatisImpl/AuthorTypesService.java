@@ -1,27 +1,29 @@
-package pl.solvd.concerthall.services.MyBatisImpl;
+package pl.solvd.concerthalls.services.MyBatisImpl;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import pl.solvd.concerthall.binary.AuthorTypes;
-import pl.solvd.concerthall.dao.mysql.MySqlDAO;
-import pl.solvd.concerthall.services.interfaces.IAuthorTypeService;
-import pl.solvd.concerthall.utils.MyBatisFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import pl.solvd.concerthalls.DAO.interfaces.IAuthorTypesDAO;
+import pl.solvd.concerthalls.DAO.mysql.MySqlDAO;
+import pl.solvd.concerthalls.binary.AuthorTypes;
+import pl.solvd.concerthalls.services.interfaces.IAuthorTypeService;
+import pl.solvd.concerthalls.utils.MyBatisFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static pl.solvd.concerthall.App.LOG;
-
 public class AuthorTypesService extends MySqlDAO implements IAuthorTypeService {
+    Logger LOG = LogManager.getLogger(AuthorTypesService.class);
     private static final SqlSessionFactory SESSION_FACTORY = MyBatisFactory.getSqlSessionFactory();
     @Override
     public AuthorTypes addEntity(AuthorTypes authorTypes) {
         try (SqlSession session = SESSION_FACTORY.openSession()) {
-            IAuthorTypeService authorTypeService = session.getMapper(IAuthorTypeService.class);
+            IAuthorTypesDAO authorTypeDAO = session.getMapper(IAuthorTypesDAO.class);
             try {
-                authorTypeService.addEntity(authorTypes);
+                authorTypeDAO.addEntity(authorTypes);
                 session.commit();
             } catch (Exception e) {
                 session.rollback();
@@ -42,8 +44,8 @@ public class AuthorTypesService extends MySqlDAO implements IAuthorTypeService {
     public AuthorTypes getEntityById(Long authorTypesId) {
         AuthorTypes authorTypes;
         try (SqlSession session = SESSION_FACTORY.openSession()) {
-            IAuthorTypeService authorTypesService = session.getMapper(IAuthorTypeService.class);
-            authorTypes = authorTypesService.getEntityById(authorTypesId);
+            IAuthorTypesDAO authorTypeDAO = session.getMapper(IAuthorTypesDAO.class);
+            authorTypes = authorTypeDAO.getEntityById(authorTypesId);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -54,9 +56,9 @@ public class AuthorTypesService extends MySqlDAO implements IAuthorTypeService {
     public void findAuthorsTypesByAuthorsId(Long authorsId) {
         List<AuthorTypes> authorTypesList = new ArrayList<>();
         try (SqlSession session = SESSION_FACTORY.openSession()) {
-            IAuthorTypeService authorTypesService = session.getMapper(IAuthorTypeService.class);
+            IAuthorTypesDAO authorTypesDAO = session.getMapper(IAuthorTypesDAO.class);
             try {
-                authorTypesService.findAuthorsTypesByAuthorsId(authorsId);
+                authorTypesDAO.findAuthorsTypesByAuthorsId(authorsId);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -66,9 +68,9 @@ public class AuthorTypesService extends MySqlDAO implements IAuthorTypeService {
     public List<AuthorTypes> updateEntity(AuthorTypes authorTypes) {
         List<AuthorTypes> updatedAuthorTypes = new ArrayList<>();
         try (SqlSession session = SESSION_FACTORY.openSession()) {
-            IAuthorTypeService authorTypeService = session.getMapper(IAuthorTypeService.class);
+            IAuthorTypesDAO authorTypeDAO = session.getMapper(IAuthorTypesDAO.class);
             try {
-                authorTypeService.updateEntity(authorTypes);
+                authorTypeDAO.updateEntity(authorTypes);
                 session.commit();
             } catch (Exception e) {
                 session.rollback();
@@ -83,9 +85,9 @@ public class AuthorTypesService extends MySqlDAO implements IAuthorTypeService {
     @Override
     public void deleteEntity(Long id) {
         try (SqlSession session = SESSION_FACTORY.openSession()) {
-            IAuthorTypeService authorTypesService = session.getMapper(IAuthorTypeService.class);
+            IAuthorTypesDAO authorTypesDAO = session.getMapper(IAuthorTypesDAO.class);
             try {
-                authorTypesService.deleteEntity(id);
+                authorTypesDAO.deleteEntity(id);
                 session.commit();
             } catch (Exception e) {
                 session.rollback();
@@ -100,8 +102,12 @@ public class AuthorTypesService extends MySqlDAO implements IAuthorTypeService {
     public List<AuthorTypes> getAll() {
         List<AuthorTypes> list = new ArrayList<>();
         try (SqlSession session = SESSION_FACTORY.openSession()) {
-            IAuthorTypeService authorTypesService = session.getMapper(IAuthorTypeService.class);
-            authorTypesService.getAll();
+            IAuthorTypesDAO authorTypesDAO = session.getMapper(IAuthorTypesDAO.class);
+            try {
+                authorTypesDAO.getAll();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             return list;
         }
     }

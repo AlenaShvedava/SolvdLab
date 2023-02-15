@@ -1,4 +1,4 @@
-package pl.solvd.concerthall.DAO;
+package pl.solvd.concerthalls.DAO;
 
 import java.util.List;
 

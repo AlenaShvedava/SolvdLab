@@ -1,7 +1,8 @@
-package pl.solvd.concerthall.dao.interfacesDAO;
+package pl.solvd.concerthalls.DAO.interfaces;
 
-import pl.solvd.concerthall.dao.IBaseDAO;
-import pl.solvd.concerthall.entities.AuthorTypes;
+
+import pl.solvd.concerthalls.DAO.IBaseDAO;
+import pl.solvd.concerthalls.binary.AuthorTypes;
 
 import java.sql.SQLException;
 import java.util.List;
