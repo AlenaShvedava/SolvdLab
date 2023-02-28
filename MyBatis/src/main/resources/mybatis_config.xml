@@ -10,9 +10,10 @@
                 <property name="defaultReadOnly" value="false"/>
             </transactionManager>
             <dataSource type="POOLED">
-                <property name="url" value="url"/>
-                <property name="username" value="login"/>
-                <property name="password" value="password"/>
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${login}"/>
+                <property name="password" value="${password}"/>
             </dataSource>
         </environment>
     </environments>

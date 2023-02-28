@@ -4,34 +4,35 @@
 <mapper namespace="pl.solvd.concerthalls.DAO.interfaces.IAuthorTypesDAO">
     <sql id="body">
         t.id as author_type_id,
-        t.type as author_type
+        t.type as author_type_type
     </sql>
-    <select id="getAll" resultMap="authorTypesResultMap">
+    <select id="getEntityById" resultMap="AuthorTypesResultMap">
         SELECT
         <include refid="body"/>
         FROM
-        AuthorTypes t
+        authorTypes t
+        WHERE t.id = #{id}
+    </select>
+    <select id="getAll" resultMap="AuthorTypesResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        authorTypes t
     </select>
     <insert id="addEntity" useGeneratedKeys="true"
             keyProperty="id">
-        INSERT INTO AuthorTypes (id,type)
+        INSERT INTO authorTypes (id, type)
         VALUES (#{id}, #{type})
     </insert>
     <update id="updateEntity">
-        UPDATE AuthorTypes SET
+        UPDATE authorTypes SET
         type = #{type},
         WHERE id = #{id}
     </update>
     <delete id="deleteEntity">
-        DELETE FROM AuthorTypes WHERE id = #{id}
+        DELETE FROM authorTypes WHERE id = #{id}
     </delete>
-    <select id="getEntityById" resultMap="authorTypesResultMap">
-        SELECT
-        <include refid="body"/>
-        FROM
-        AuthorTypes t
-        WHERE t.id = #{id}
-    </select>
+
     <select id="findAuthorsTypesByAuthorsId" resultMap="authorTypesResultMap">
         SELECT
         t.id as author_types_id,
@@ -39,7 +40,7 @@
         <include refid="pl.solvd.concerthalls.DAO.interfaces.IAuthorsDAO.body"/>
         FROM
         AuthorTypes t
-        LEFT JOIN AuthorHasAuthorTypes AS at
+        LEFT JOIN authorsHasAuthorTypes AS at
         ON t.id = at.authorTypesId
         WHERE a.id = #{id}
     </select>
@@ -47,6 +48,6 @@
         <id column="author_types_id" property="id"/>
         <result column="author_types_type" property="type"/>
         <collection property="authors"
-                    resultMap="pl.solvd.concerthalls.DAO.interfaces.IAuthorsDAO.authorsResultMap"/>
+                    resultMap="pl.solvd.concerthalls.binary.authorsResultMap"/>
     </resultMap>
 </mapper>

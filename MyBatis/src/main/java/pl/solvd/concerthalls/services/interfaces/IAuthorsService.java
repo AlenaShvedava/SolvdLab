@@ -9,8 +9,8 @@ public interface IAuthorsService {
     Authors addEntity(Authors authors);
     List<Authors> getAllAuthorsBy(Predicate<Authors> predicate);
     Authors getEntityById(Long authorsId);
-    void findAuthorsByAuthorTypesId(Long authorTypesId);
-    public void findAuthorsByCompositionId(Long compositionId);
+    List<Authors> findAuthorsByAuthorTypesId(Long authorTypesId);
+//    public void findAuthorsByCompositionId(Long compositionId);
     List<Authors> updateEntity(Authors authors);
     void deleteEntity(Long id);
     List<Authors> getAll();

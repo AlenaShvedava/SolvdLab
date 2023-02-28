@@ -1,13 +1,11 @@
 package pl.solvd.concerthalls.binary;
 
 
-import org.apache.ibatis.type.Alias;
-
 import java.util.ArrayList;
 import java.util.List;
-@Alias("Authors")
-public class Authors extends Base {
-    //private Long id;
+
+public class Authors {
+    private static Long id;
     private List<AuthorTypes> authorTypes;
     private String firstName;
     private String lastName;
@@ -19,17 +17,17 @@ public class Authors extends Base {
     public Authors(Long id, String firstName, String lastName) {
         authorTypes = new ArrayList<>();
         //composition = new ArrayList<>();
-        this.setId(id);
+        Authors.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-//    public static Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {id = id;
-//    }
+    public static Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {id = id;
+    }
 
     public List<AuthorTypes> getAuthorTypes() {
         return authorTypes;

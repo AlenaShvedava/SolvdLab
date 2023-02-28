@@ -2,67 +2,80 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
 <mapper namespace="pl.solvd.concerthalls.DAO.interfaces.IAuthorsDAO">
-    <sql id="body">
-        a.id as author_id,
-        a.firstName as author_first_name,
-        a.lastName as author_last_name
-    </sql>
-    <select id="getAll" resultMap="authorsResultMap">
+
+    <select id="getEntityById" resultMap="AuthorsResultMap">
         SELECT
-        <include refid="body"/>
+        a.id, a.first_name, a.last_name
         FROM
-        Authors a
+        authors a
+        WHERE id = #{id}
     </select>
-    <insert id="addEntity" useGeneratedKeys="true"
-        keyProperty="id">
-        insert into Authors (id, firstName, lastName)
-        values (#{id},#{firstName},#{lastName})
-    </insert>
-    <update id="updateEntity">
-        update Authors set
-        firstName = #{username},
-        lastName = #{password}
-        where id = #{id}
-    </update>
-    <delete id="deleteEntity">
-        delete from Authors where id = #{id}
-    </delete>
-    <select id="getEntityById" resultMap="authorsResultMap">
-        SELECT
-        <include refid="body"/>
-        FROM
-        Authors a
-        WHERE a.id = #{id}
-    </select>
-    <select id="findAuthorsByAuthorTypesId" resultMap="authorsResultMap">
-        SELECT
-        a.id as author_id,
-        a.firstName as author_first_name,
-        a.lastName as author_last_name
-        <include refid="pl.solvd.concerthalls.DAO.interfaces.IAuthorTypesDAO.body"/>
-        FROM
-        Authors a
-        LEFT JOIN AuthorHasAuthorTypes AS at
-        ON a.id = at.authorsId
-        WHERE t.id = #{id}
-    </select>
-<!--    <select id="findAuthorsByCompositionId" resultMap="authorsResultMap">-->
-<!--        SELECT-->
-<!--        a.id as author_id,-->
-<!--        a.firstName as author_first_name,-->
-<!--        a.lastName as author_last_name-->
-<!--        <include refid="pl.solvd.concerthalls.dao.interfacesDAO.ICompositionDAO.body"/>-->
-<!--        FROM-->
-<!--        Authors a-->
-<!--        LEFT JOIN CompositionHasAuthors AS ca-->
-<!--        ON a.id = ca.authorsId-->
-<!--        WHERE c.id = #{id}-->
-<!--    </select>-->
-    <resultMap id="authorsResultMap" type="pl.solvd.concerthalls.binary.Authors" autoMapping="false">
-        <id column="author_id" property="id"/>
-        <result column="author_first_name" property="firstName"/>
-        <result column="author_last_name" property="lastName"/>
-        <collection property="authorTypes" resultMap="pl.solvd.concerthalls.DAO.interfaces.IAuthorTypesDAO.authorTypesResultMap"/>
-<!--        <collection property="composition" resultMap="pl.solvd.concerthalls.binary.ICompositionDAO.compositionResultMap"/>-->
+    <resultMap id="AuthorResultMap" type="pl.solvd.concerthalls.binary.Authors" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="first_name" property="firstName"/>
+        <result column="last_name" property="lastName"/>
     </resultMap>
 </mapper>
+        <!--        <include refid="body"/>-->
+        <!--    <sql id="body">-->
+        <!--       -->
+        <!--    </sql>-->
+
+
+        <!--    <select id="getAll" resultMap="AuthorsResultMap">-->
+        <!--        SELECT-->
+        <!--        <include refid="body"/>-->
+        <!--        FROM-->
+        <!--        authors a-->
+        <!--    </select>-->
+        <!--    <insert id="addEntity" useGeneratedKeys="true" keyProperty="id">-->
+        <!--        insert into authors (id, firstName, lastName)-->
+        <!--        values (#{id},#{firstName},#{lastName})-->
+        <!--    </insert>-->
+        <!--    <update id="updateEntity">-->
+        <!--        update authors set-->
+        <!--        firstName = #{username},-->
+        <!--        lastName = #{password}-->
+        <!--        where id = #{id}-->
+        <!--    </update>-->
+        <!--    <delete id="deleteEntity">-->
+        <!--        delete from authors where id = #{id}-->
+        <!--    </delete>-->
+
+
+        <!--    <select id="findAuthorsByAuthorTypesId" resultMap="authorsResultMap">-->
+        <!--        SELECT-->
+        <!--        a.id,-->
+        <!--        a.first_name,-->
+        <!--        a.last_name-->
+        <!--        <include refid="pl.solvd.concerthalls.DAO.interfaces.IAuthorTypesDAO.body"/>-->
+        <!--        FROM-->
+        <!--        authors a-->
+        <!--        JOIN author_has_author_types at-->
+        <!--        ON a.id = at.authors_id-->
+        <!--        JOIN author_types t ON at.authors_id = t.id-->
+        <!--    </select>-->
+        <!--    <resultMap id="authorResultMap" type="pl.solvd.concerthalls.binary.Authors" autoMapping="false">-->
+        <!--        <id column="id" property="id"/>-->
+        <!--        <result column="first_name" property="firstName"/>-->
+        <!--        <result column="last_name" property="lastName"/>-->
+        <!--        <collection property="authorTypes" resultMap="pl.solvd.concerthalls.binary.authorTypesResultMap"/>-->
+        <!--    </resultMap>-->
+        <!--    <resultMap id="authorTypesResultMap" type="pl.solvd.concerthalls.binary.AuthorTypes" autoMapping="false">-->
+        <!--        <id column="id" property="id"/>-->
+        <!--        <result column="type" property="type"/>-->
+        <!--    </resultMap>-->
+
+
+        <!--    <select id="findAuthorsByCompositionId" resultMap="authorsResultMap">-->
+        <!--        SELECT-->
+        <!--        a.id as author_id,-->
+        <!--        a.firstName as author_first_name,-->
+        <!--        a.lastName as author_last_name-->
+        <!--        <include refid="pl.solvd.concerthalls.dao.interfacesDAO.ICompositionDAO.body"/>-->
+        <!--        FROM-->
+        <!--        Authors a-->
+        <!--        LEFT JOIN CompositionHasAuthors AS ca-->
+        <!--        ON a.id = ca.authorsId-->
+        <!--        WHERE c.id = #{id}-->
+        <!--    </select>-->

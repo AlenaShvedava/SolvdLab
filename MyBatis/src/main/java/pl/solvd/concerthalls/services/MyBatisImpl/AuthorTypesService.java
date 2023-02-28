@@ -10,7 +10,6 @@ import pl.solvd.concerthalls.binary.AuthorTypes;
 import pl.solvd.concerthalls.services.interfaces.IAuthorTypeService;
 import pl.solvd.concerthalls.utils.MyBatisFactory;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -42,26 +41,19 @@ public class AuthorTypesService extends MySqlDAO implements IAuthorTypeService {
 
     @Override
     public AuthorTypes getEntityById(Long authorTypesId) {
-        AuthorTypes authorTypes;
         try (SqlSession session = SESSION_FACTORY.openSession()) {
             IAuthorTypesDAO authorTypeDAO = session.getMapper(IAuthorTypesDAO.class);
-            authorTypes = authorTypeDAO.getEntityById(authorTypesId);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            AuthorTypes authorTypes = authorTypeDAO.getEntityById(authorTypesId);
+            return authorTypes;
         }
-        return authorTypes;
     }
 
     @Override
-    public void findAuthorsTypesByAuthorsId(Long authorsId) {
-        List<AuthorTypes> authorTypesList = new ArrayList<>();
+    public List <AuthorTypes> findAuthorsTypesByAuthorsId(Long authorsId) {
         try (SqlSession session = SESSION_FACTORY.openSession()) {
             IAuthorTypesDAO authorTypesDAO = session.getMapper(IAuthorTypesDAO.class);
-            try {
-                authorTypesDAO.findAuthorsTypesByAuthorsId(authorsId);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            List<AuthorTypes> authorTypesList = authorTypesDAO.findAuthorsTypesByAuthorsId(authorsId);
+            return authorTypesList;
         }
     }
     @Override
@@ -100,14 +92,9 @@ public class AuthorTypesService extends MySqlDAO implements IAuthorTypeService {
 
     @Override
     public List<AuthorTypes> getAll() {
-        List<AuthorTypes> list = new ArrayList<>();
         try (SqlSession session = SESSION_FACTORY.openSession()) {
             IAuthorTypesDAO authorTypesDAO = session.getMapper(IAuthorTypesDAO.class);
-            try {
-                authorTypesDAO.getAll();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            List<AuthorTypes> list = authorTypesDAO.getAll();
             return list;
         }
     }
