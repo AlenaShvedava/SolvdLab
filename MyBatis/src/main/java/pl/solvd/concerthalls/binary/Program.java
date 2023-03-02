@@ -1,35 +1,23 @@
-package pl.solvd.concerthall.models;
+package pl.solvd.concerthalls.binary;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
-@XmlRootElement(name = "program")
 public class Program {
     private Long id;
     List<Images> images;
+    List<Genre> genre;
     List<Composition> composition;
+    private String title;
+    private String description;
     private String ageLimit;
     private double basePrice;
     List<ConcertHalls> concertHall;
-    private String organization;
+    private Long organizationId;
+    List<Poster> poster;
 
     public Program() {
     }
 
-    public Program(Long id, List<Images> images, List<Composition> composition, String ageLimit, double basePrice, List<ConcertHalls> concertHall, String organization) {
-        this.id = id;
-        this.images = images;
-        this.composition = composition;
-        this.ageLimit = ageLimit;
-        this.basePrice = basePrice;
-        this.concertHall = concertHall;
-        this.organization = organization;
-    }
-
-    @XmlAttribute
     public Long getId() {
         return id;
     }
@@ -38,7 +26,6 @@ public class Program {
         this.id = id;
     }
 
-    @XmlElement(name = "images")
     public List<Images> getImages() {
         return images;
     }
@@ -47,7 +34,6 @@ public class Program {
         this.images = images;
     }
 
-    @XmlElement(name = "composition")
     public List<Composition> getComposition() {
         return composition;
     }
@@ -56,7 +42,30 @@ public class Program {
         this.composition = composition;
     }
 
-    @XmlElement(name = "agelimit")
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
+
     public String getAgeLimit() {
         return ageLimit;
     }
@@ -65,17 +74,14 @@ public class Program {
         this.ageLimit = ageLimit;
     }
 
-    @XmlElement(name = "baseprice")
     public double getBasePrice() {
         return basePrice;
     }
-
 
     public void setBasePrice(double basePrice) {
         this.basePrice = basePrice;
     }
 
-    @XmlElement(name = "concerthalls")
     public List<ConcertHalls> getConcertHall() {
         return concertHall;
     }
@@ -84,13 +90,20 @@ public class Program {
         this.concertHall = concertHall;
     }
 
-    @XmlElement(name = "organization")
-    public String getOrganization() {
-        return organization;
+    public List<Genre> getGenre() {
+        return genre;
     }
 
-    public void setOrganization(String organization) {
-        this.organization = organization;
+    public void setGenre(List<Genre> genre) {
+        this.genre = genre;
+    }
+
+    public List<Poster> getPoster() {
+        return poster;
+    }
+
+    public void setPoster(List<Poster> poster) {
+        this.poster = poster;
     }
 
     @Override
@@ -98,9 +111,11 @@ public class Program {
         return "\nProgram: \n" +
                 "Images: " + images.toString().replace("[", "").replace("]", "").replace(",", "") + "\n" +
                 composition.toString().replace("[", "").replace("]", "").replace(",", "") + "\n" +
+                "title: " + title + '\'' +
+                "description: " + description + '\'' +
                 "ageLimit: " + ageLimit + "\n" +
                 "basePrice: " + basePrice + " euro\n" +
                 concertHall.toString().replace("[", "").replace("]", "").replace(",", "") + "\n" +
-                "organization: " + organization + "\n";
+                "organization: " + organizationId + "\n";
     }
 }

@@ -1,15 +1,13 @@
-package pl.solvd.concerthall.models;
+package pl.solvd.concerthalls.binary;
+
+import java.util.List;
 
 public class Organization {
     private Long id;
     private String name;
+    List<Program> program;
 
     public Organization() {
-    }
-
-    public Organization(Long id, String name) {
-        this.id = id;
-        this.name = name;
     }
 
     public Long getId() {
@@ -26,6 +24,14 @@ public class Organization {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Program> getProgram() {
+        return program;
+    }
+
+    public void setProgram(List<Program> program) {
+        this.program = program;
     }
 
     @Override

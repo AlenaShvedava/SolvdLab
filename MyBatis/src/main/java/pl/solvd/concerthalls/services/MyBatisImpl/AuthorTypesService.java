@@ -5,8 +5,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pl.solvd.concerthalls.DAO.interfaces.IAuthorTypesDAO;
-import pl.solvd.concerthalls.DAO.mysql.MySqlDAO;
 import pl.solvd.concerthalls.binary.AuthorTypes;
+import pl.solvd.concerthalls.binary.Authors;
 import pl.solvd.concerthalls.services.interfaces.IAuthorTypeService;
 import pl.solvd.concerthalls.utils.MyBatisFactory;
 
@@ -14,11 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class AuthorTypesService extends MySqlDAO implements IAuthorTypeService {
+public class AuthorTypesService implements IAuthorTypeService {
     Logger LOG = LogManager.getLogger(AuthorTypesService.class);
     private static final SqlSessionFactory SESSION_FACTORY = MyBatisFactory.getSqlSessionFactory();
+
     @Override
-    public AuthorTypes addEntity(AuthorTypes authorTypes) {
+    public AuthorTypes addAuthorType(AuthorTypes authorTypes) {
         try (SqlSession session = SESSION_FACTORY.openSession()) {
             IAuthorTypesDAO authorTypeDAO = session.getMapper(IAuthorTypesDAO.class);
             try {
@@ -40,7 +41,7 @@ public class AuthorTypesService extends MySqlDAO implements IAuthorTypeService {
     }
 
     @Override
-    public AuthorTypes getEntityById(Long authorTypesId) {
+    public AuthorTypes getAuthorTypeById(Long authorTypesId) {
         try (SqlSession session = SESSION_FACTORY.openSession()) {
             IAuthorTypesDAO authorTypeDAO = session.getMapper(IAuthorTypesDAO.class);
             AuthorTypes authorTypes = authorTypeDAO.getEntityById(authorTypesId);
@@ -49,15 +50,7 @@ public class AuthorTypesService extends MySqlDAO implements IAuthorTypeService {
     }
 
     @Override
-    public List <AuthorTypes> findAuthorsTypesByAuthorsId(Long authorsId) {
-        try (SqlSession session = SESSION_FACTORY.openSession()) {
-            IAuthorTypesDAO authorTypesDAO = session.getMapper(IAuthorTypesDAO.class);
-            List<AuthorTypes> authorTypesList = authorTypesDAO.findAuthorsTypesByAuthorsId(authorsId);
-            return authorTypesList;
-        }
-    }
-    @Override
-    public List<AuthorTypes> updateEntity(AuthorTypes authorTypes) {
+    public List<AuthorTypes> updateAuthorType(AuthorTypes authorTypes) {
         List<AuthorTypes> updatedAuthorTypes = new ArrayList<>();
         try (SqlSession session = SESSION_FACTORY.openSession()) {
             IAuthorTypesDAO authorTypeDAO = session.getMapper(IAuthorTypesDAO.class);
@@ -75,7 +68,7 @@ public class AuthorTypesService extends MySqlDAO implements IAuthorTypeService {
     }
 
     @Override
-    public void deleteEntity(Long id) {
+    public void deleteAuthorType(Long id) {
         try (SqlSession session = SESSION_FACTORY.openSession()) {
             IAuthorTypesDAO authorTypesDAO = session.getMapper(IAuthorTypesDAO.class);
             try {
@@ -96,6 +89,15 @@ public class AuthorTypesService extends MySqlDAO implements IAuthorTypeService {
             IAuthorTypesDAO authorTypesDAO = session.getMapper(IAuthorTypesDAO.class);
             List<AuthorTypes> list = authorTypesDAO.getAll();
             return list;
+        }
+    }
+
+    @Override
+    public List<Authors> findAuthorsByAuthorTypesId(Long authorTypesId) {
+        try (SqlSession session = SESSION_FACTORY.openSession()) {
+            IAuthorTypesDAO authorTypesDAO = session.getMapper(IAuthorTypesDAO.class);
+            List<Authors> authorsList = authorTypesDAO.findAuthorsByAuthorTypesId(authorTypesId);
+            return authorsList;
         }
     }
 }

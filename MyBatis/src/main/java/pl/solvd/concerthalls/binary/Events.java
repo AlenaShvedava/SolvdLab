@@ -1,15 +1,13 @@
-package pl.solvd.concerthall.models;
+package pl.solvd.concerthalls.binary;
+
+import java.util.List;
 
 public class Events {
     private Long id;
     private String category;
+    List<Genre> genre;
 
     public Events() {
-    }
-
-    public Events(Long id, String category) {
-        this.id = id;
-        this.category = category;
     }
 
     public Long getId() {
@@ -26,6 +24,14 @@ public class Events {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public List<Genre> getGenre() {
+        return genre;
+    }
+
+    public void setGenre(List<Genre> genre) {
+        this.genre = genre;
     }
 
     @Override

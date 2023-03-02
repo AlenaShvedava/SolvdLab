@@ -5,22 +5,23 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pl.solvd.concerthalls.DAO.interfaces.IAuthorsDAO;
-import pl.solvd.concerthalls.DAO.mysql.MySqlDAO;
+import pl.solvd.concerthalls.binary.AuthorTypes;
 import pl.solvd.concerthalls.binary.Authors;
+import pl.solvd.concerthalls.binary.Composition;
 import pl.solvd.concerthalls.services.interfaces.IAuthorsService;
 import pl.solvd.concerthalls.utils.MyBatisFactory;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class AuthorsService extends MySqlDAO implements IAuthorsService {
+public class AuthorsService implements IAuthorsService {
     Logger LOG = LogManager.getLogger(AuthorsService.class);
 
     private static final SqlSessionFactory SESSION_FACTORY = MyBatisFactory.getSqlSessionFactory();
+
     @Override
-    public Authors addEntity(Authors authors) {
+    public Authors addAuthor(Authors authors) {
         try (SqlSession session = SESSION_FACTORY.openSession()) {
             IAuthorsDAO authorsDAO = session.getMapper(IAuthorsDAO.class);
             try {
@@ -42,47 +43,16 @@ public class AuthorsService extends MySqlDAO implements IAuthorsService {
     }
 
     @Override
-    public Authors getEntityById(Long authorsId) {
-        Authors author;
+    public Authors getAuthorById(Long authorsId) {
         try (SqlSession session = SESSION_FACTORY.openSession()) {
             IAuthorsDAO authorsDAO = session.getMapper(IAuthorsDAO.class);
-            try {
-                author = authorsDAO.getEntityById(authorsId);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return author;
-    }
-
-    @Override
-    public void findAuthorsByAuthorTypesId(Long authorTypesId) {
-        List<Authors> authorsList = new ArrayList<>();
-        try (SqlSession session = SESSION_FACTORY.openSession()) {
-            IAuthorsDAO authorsDAO = session.getMapper(IAuthorsDAO.class);
-            try {
-                authorsDAO.findAuthorsByAuthorTypesId(authorTypesId);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            Authors author = authorsDAO.getEntityById(authorsId);
+            return author;
         }
     }
 
     @Override
-    public void findAuthorsByCompositionId(Long compositionId) {
-        List<Authors> authorsList = new ArrayList<>();
-        try (SqlSession session = SESSION_FACTORY.openSession()) {
-            IAuthorsDAO authorsDAO = session.getMapper(IAuthorsDAO.class);
-            try {
-                authorsDAO.findAuthorsByCompositionId(compositionId);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    @Override
-    public List<Authors> updateEntity(Authors authors) {
+    public List<Authors> updateAuthor(Authors authors) {
         List<Authors> updatedAuthors = new ArrayList<>();
         try (SqlSession session = SESSION_FACTORY.openSession()) {
             IAuthorsDAO authorsDAO = session.getMapper(IAuthorsDAO.class);
@@ -100,7 +70,7 @@ public class AuthorsService extends MySqlDAO implements IAuthorsService {
     }
 
     @Override
-    public void deleteEntity(Long id) {
+    public void deleteAuthor(Long id) {
         try (SqlSession session = SESSION_FACTORY.openSession()) {
             IAuthorsDAO authorsDAO = session.getMapper(IAuthorsDAO.class);
             try {
@@ -117,15 +87,28 @@ public class AuthorsService extends MySqlDAO implements IAuthorsService {
 
     @Override
     public List<Authors> getAll() {
-        List<Authors> list = new ArrayList<>();
         try (SqlSession session = SESSION_FACTORY.openSession()) {
             IAuthorsDAO authorsDAO = session.getMapper(IAuthorsDAO.class);
-            try {
-                authorsDAO.getAll();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            List<Authors> list = authorsDAO.getAll();
             return list;
+        }
+    }
+
+    @Override
+    public List<AuthorTypes> findAuthorTypesByAuthorsId(Long authorsId) {
+        try (SqlSession session = SESSION_FACTORY.openSession()) {
+            IAuthorsDAO authorsDAO = session.getMapper(IAuthorsDAO.class);
+            List<AuthorTypes> authorTypesList = authorsDAO.findAuthorTypesByAuthorsId(authorsId);
+            return authorTypesList;
+        }
+    }
+
+    @Override
+    public List<Composition> findCompositionsByAuthorsId(Long authorsId) {
+        try (SqlSession session = SESSION_FACTORY.openSession()) {
+            IAuthorsDAO authorsDAO = session.getMapper(IAuthorsDAO.class);
+            List<Composition> compositionsList = authorsDAO.findCompositionsByAuthorsId(authorsId);
+            return compositionsList;
         }
     }
 }

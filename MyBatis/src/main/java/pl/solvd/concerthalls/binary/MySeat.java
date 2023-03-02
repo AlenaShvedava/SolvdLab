@@ -1,4 +1,4 @@
-package pl.solvd.concerthall.models;
+package pl.solvd.concerthalls.binary;
 
 public class MySeat {
     private Long id;
@@ -7,13 +7,6 @@ public class MySeat {
     private int numOfSeatsId;
 
     public MySeat() {
-    }
-
-    public MySeat(Long id, int rowNumber, int seatNumber, int numOfSeatsId) {
-        this.id = id;
-        this.rowNumber = rowNumber;
-        this.seatNumber = seatNumber;
-        this.numOfSeatsId = numOfSeatsId;
     }
 
     public Long getId() {

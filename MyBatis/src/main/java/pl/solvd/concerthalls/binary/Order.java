@@ -1,21 +1,13 @@
-package pl.solvd.concerthall.models;
+package pl.solvd.concerthalls.binary;
 
 public class Order {
     private Long id;
     private Long customerId;
     private Long posterId;
     private Long priceLevelId;
-    private Long numberOfTickets;
+    private int numberOfTickets;
 
     public Order() {
-    }
-
-    public Order(Long id, Long customerId, Long posterId, Long priceLevelId, Long numberOfTickets) {
-        this.id = id;
-        this.customerId = customerId;
-        this.posterId = posterId;
-        this.priceLevelId = priceLevelId;
-        this.numberOfTickets = numberOfTickets;
     }
 
     public Long getId() {
@@ -50,11 +42,11 @@ public class Order {
         this.priceLevelId = priceLevelId;
     }
 
-    public Long getNumberOfTickets() {
+    public int getNumberOfTickets() {
         return numberOfTickets;
     }
 
-    public void setNumberOfTickets(Long numberOfTickets) {
+    public void setNumberOfTickets(int numberOfTickets) {
         this.numberOfTickets = numberOfTickets;
     }
 

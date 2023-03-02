@@ -1,30 +1,18 @@
-package pl.solvd.concerthall.models;
+package pl.solvd.concerthalls.binary;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
-@XmlRootElement(name = "concerthalls")
 public class ConcertHalls {
     private Long id;
     private String name;
     private String phone;
     private String address;
     private int sumNumberOfSeats;
-
+    List<Program> program;
 
     public ConcertHalls() {
     }
 
-    public ConcertHalls(Long id, String name, String address, int sumNumberOfSeats, String phone) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.sumNumberOfSeats = sumNumberOfSeats;
-        this.phone = phone;
-    }
-
-    @XmlAttribute
     public Long getId() {
         return id;
     }
@@ -33,7 +21,6 @@ public class ConcertHalls {
         this.id = id;
     }
 
-    @XmlElement(name = "name")
     public String getName() {
         return name;
     }
@@ -42,7 +29,6 @@ public class ConcertHalls {
         this.name = name;
     }
 
-    @XmlElement(name = "address")
     public String getAddress() {
         return address;
     }
@@ -59,7 +45,6 @@ public class ConcertHalls {
         this.sumNumberOfSeats = sumNumberOfSeats;
     }
 
-    @XmlElement(name = "phone")
     public String getPhone() {
         return phone;
     }
@@ -68,12 +53,19 @@ public class ConcertHalls {
         this.phone = phone;
     }
 
+    public List<Program> getProgram() {
+        return program;
+    }
+
+    public void setProgram(List<Program> program) {
+        this.program = program;
+    }
+
     @Override
     public String toString() {
         return "\nConcert Hall: " + name + "\n" +
                 "Address: " + address + "\n" +
                 "Phone: " + phone + "\n" +
                 "=====================================";
-
     }
 }

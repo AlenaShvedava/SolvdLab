@@ -1,16 +1,12 @@
-package pl.solvd.concerthall.models;
+package pl.solvd.concerthalls.binary;
 
 public class NumOfSeats {
     private Long id;
     private Long concertHallsId;
-    private int priceLevelId;
+    private Long priceLevelId;
     private int amountOfSeats;
 
-    public NumOfSeats(Long id, Long concertHallsId, int priceLevelId, int amountOfSeats) {
-        this.id = id;
-        this.concertHallsId = concertHallsId;
-        this.priceLevelId = priceLevelId;
-        this.amountOfSeats = amountOfSeats;
+    public NumOfSeats() {
     }
 
     public Long getId() {
@@ -29,11 +25,11 @@ public class NumOfSeats {
         this.concertHallsId = concertHallsId;
     }
 
-    public int getPriceLevelId() {
+    public Long getPriceLevelId() {
         return priceLevelId;
     }
 
-    public void setPriceLevelId(int priceLevelId) {
+    public void setPriceLevelId(Long priceLevelId) {
         this.priceLevelId = priceLevelId;
     }
 

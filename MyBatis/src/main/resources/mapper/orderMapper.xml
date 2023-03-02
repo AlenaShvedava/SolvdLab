@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+<mapper namespace="pl.solvd.concerthalls.DAO.interfaces.IOrderDAO">
+    <sql id="body">
+        o.customer_id, o.poster_id, o.price_level_id, o.number_of_tickets, o.total_price
+    </sql>
+    <select id="getEntityById" resultMap="orderResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        concerthall.order o
+        WHERE id = #{id}
+    </select>
+    <select id="getAll" resultMap="orderResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        concerthall.order o
+    </select>
+    <insert id="addEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into concerthall.order (id, customerId, posterId, priceLevelId, numberOfTickets, totalPrice)
+        values (#{id}, #{customerId}, #{posterId}, #{priceLevelId}, #{numberOfTickets}, #{totalPrice})
+    </insert>
+    <update id="updateEntity">
+        update concerthall.order set
+        customerId = #{customerId},
+        posterId = #{posterId}
+        priceLevelId = #{priceLevelId}
+        numberOfTickets = #{numberOfTickets}
+        totalPrice = #{totalPrice}
+        where id = #{id}
+    </update>
+    <delete id="deleteEntity">
+        delete from concerthall.order where id = #{id}
+    </delete>
+    <resultMap id="orderResultMap" type="pl.solvd.concerthalls.binary.Order" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="poster_id" property="posterId"/>
+        <result column="price_level_id" property="priceLevelId"/>
+        <result column="number_of_tickets" property="numberOfTickets"/>
+        <result column="total_price" property="totalPrice"/>
+    </resultMap>
+</mapper>

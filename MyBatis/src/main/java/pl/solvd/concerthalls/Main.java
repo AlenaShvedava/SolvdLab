@@ -1,19 +1,34 @@
 package pl.solvd.concerthalls;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import pl.solvd.concerthalls.services.MyBatisImpl.AuthorTypesService;
-import pl.solvd.concerthalls.services.MyBatisImpl.AuthorsService;
-import pl.solvd.concerthalls.services.interfaces.IAuthorTypeService;
-import pl.solvd.concerthalls.services.interfaces.IAuthorsService;
+import pl.solvd.concerthalls.services.MyBatisImpl.*;
+import pl.solvd.concerthalls.services.interfaces.*;
+
 public class Main {
-    Logger LOG = LogManager.getLogger(Main.class);
-    public static void main(String[] args) throws Exception {
+
+    public static void main(String[] args) {
         IAuthorsService authorsService = new AuthorsService();
-        authorsService.getEntityById(1L);
+        IAuthorTypeService authorTypesService = new AuthorTypesService();
+        ICompositionService compositionService = new CompositionService();
+        IProgramService programService = new ProgramService();
+        IGenreService genreService = new GenreService();
+        IOrganizationService organizationService = new OrganizationService();
+        IConcertHallsService concertHallService = new ConcertHallsService();
+        IPosterService posterService = new PosterService();
+        IImagesService imageService = new ImagesService();
+        IEventsService eventService = new EventsService();
+        ICustomerService customerService = new CustomerService();
+        INumOfSeatsService numOfSeatsService = new NumOfSeatsService();
+        IMySeatService mySeatService = new MySeatService();
+        IPriceLevelService priceLevelService = new PriceLevelService();
+        IOrderService orderService = new OrderService();
+        ITicketService ticketService = new TicketService();
         //authorsService.addEntity(new Authors(26L, "Alexandr", "Pushkin"));
         //System.out.println(authorsService.getEntityById(1L));
-        IAuthorTypeService authorTypeService = new AuthorTypesService();
-       // LOG.info(authorTypeService.getEntityById(1L));
+//       compositionService.findAuthorsByCompositionId(1L);
+//        authorsService.findCompositionsByAuthorsId(1L);
+        // LOG.info(authorTypeService.getEntityById(1L));
+//        authorTypesService.findAuthorsByAuthorTypesId(1L);
+//        authorsService.findAuthorTypesByAuthorsId(1L);
+//      compositionService.findProgramsByCompositionId(1L);
     }
 }

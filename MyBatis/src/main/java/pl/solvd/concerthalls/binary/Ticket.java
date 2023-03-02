@@ -1,4 +1,5 @@
-package pl.solvd.concerthall.models;
+package pl.solvd.concerthalls.binary;
+
 public class Ticket {
     private Long id;
     private Long orderId;
@@ -7,14 +8,6 @@ public class Ticket {
     private boolean active;
 
     public Ticket() {
-    }
-
-    public Ticket(Long id, Long orderId, Long mySeatId, int price, boolean active) {
-        this.id = id;
-        this.orderId = orderId;
-        this.mySeatId = mySeatId;
-        this.price = price;
-        this.active = active;
     }
 
     public Long getId() {

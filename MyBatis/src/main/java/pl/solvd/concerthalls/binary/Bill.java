@@ -1,4 +1,4 @@
-package pl.solvd.concerthall.models;
+package pl.solvd.concerthalls.binary;
 
 public class Bill {
     private Long id;
@@ -8,14 +8,6 @@ public class Bill {
     private boolean active;
 
     public Bill() {
-    }
-
-    public Bill(Long id, Long orderId, double totalPrice, String paymentStatus, boolean active) {
-        this.id = id;
-        OrderId = orderId;
-        this.totalPrice = totalPrice;
-        this.paymentStatus = paymentStatus;
-        this.active = active;
     }
 
     public Long getId() {

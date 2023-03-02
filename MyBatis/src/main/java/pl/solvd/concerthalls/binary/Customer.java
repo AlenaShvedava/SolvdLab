@@ -1,4 +1,4 @@
-package pl.solvd.concerthall.models;
+package pl.solvd.concerthalls.binary;
 
 public class Customer {
     private Long id;
@@ -8,14 +8,6 @@ public class Customer {
     private int balance;
 
     public Customer() {
-    }
-
-    public Customer(Long id, String firstName, String lastName, String email, int balance) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.balance = balance;
     }
 
     public Long getId() {

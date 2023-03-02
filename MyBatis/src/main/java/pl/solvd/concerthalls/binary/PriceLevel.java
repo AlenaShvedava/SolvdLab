@@ -1,4 +1,4 @@
-package pl.solvd.concerthall.models;
+package pl.solvd.concerthalls.binary;
 
 public class PriceLevel {
     private Long id;
@@ -6,12 +6,6 @@ public class PriceLevel {
     private double coefficient;
 
     public PriceLevel() {
-    }
-
-    public PriceLevel(Long id, String type, double coefficient) {
-        this.id = id;
-        this.type = type;
-        this.coefficient = coefficient;
     }
 
     public Long getId() {

@@ -3,6 +3,7 @@ package pl.solvd.concerthalls.DAO.interfaces;
 
 import pl.solvd.concerthalls.DAO.IBaseDAO;
 import pl.solvd.concerthalls.binary.AuthorTypes;
+import pl.solvd.concerthalls.binary.Authors;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -12,5 +13,5 @@ public interface IAuthorTypesDAO extends IBaseDAO<AuthorTypes, Long> {
 
     AuthorTypes getEntityById(Long id);
 
-    List<AuthorTypes> findAuthorsTypesByAuthorsId(Long authorsId);
+    List<Authors> findAuthorsByAuthorTypesId(Long authorTypesId);
 }

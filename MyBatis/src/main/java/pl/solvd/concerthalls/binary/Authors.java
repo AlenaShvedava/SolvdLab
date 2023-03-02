@@ -1,32 +1,23 @@
 package pl.solvd.concerthalls.binary;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Authors {
-    private static Long id;
+    private Long id;
     private List<AuthorTypes> authorTypes;
     private String firstName;
     private String lastName;
-    //List <Composition> composition;
+    List<Composition> composition;
 
-//    public Authors() {
-//    }
-
-    public Authors(Long id, String firstName, String lastName) {
-        authorTypes = new ArrayList<>();
-        //composition = new ArrayList<>();
-        Authors.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Authors() {
     }
 
-    public static Long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {id = id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public List<AuthorTypes> getAuthorTypes() {
@@ -53,26 +44,13 @@ public class Authors {
         this.lastName = lastName;
     }
 
-//    public List<Composition> getComposition() {
-//        return composition;
-//    }
-//
-//    public void setComposition(List<Composition> composition) {
-//        this.composition = composition;
-//    }
+    public List<Composition> getComposition() {
+        return composition;
+    }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Authors authors = (Authors) o;
-//        return getId() == authors.getId() && Objects.equals(authorTypes, authors.authorTypes) && Objects.equals(firstName, authors.firstName) && Objects.equals(lastName, authors.lastName);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(getId(), authorTypes, firstName, lastName);
-//    }
+    public void setComposition(List<Composition> composition) {
+        this.composition = composition;
+    }
 
     @Override
     public String toString() {
