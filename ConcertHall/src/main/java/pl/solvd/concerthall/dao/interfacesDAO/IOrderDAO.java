@@ -1,12 +1,13 @@
-package pl.solvd.concerthall.dao.interfacesDAO;
+package pl.solvd.concerthall.DAO.interfacesDAO;
 
-import pl.solvd.concerthall.dao.IBaseDAO;
-import pl.solvd.concerthall.entities.Order;
+import pl.solvd.concerthall.DAO.IBaseDAO;
+import pl.solvd.concerthall.binary.Order;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface IOrderDAO extends IBaseDAO <Order, Long> {
-    List <Order> getAllOrderBy (Predicate<Order> predicate) throws Exception;
-    Order getEntityById(Long id) throws Exception;
+public interface IOrderDAO extends IBaseDAO<Order, Long> {
+    List<Order> getAllOrderBy(Predicate<Order> predicate);
+
+    Order getEntityById(Long id);
 }

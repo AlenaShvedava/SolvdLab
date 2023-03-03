@@ -1,12 +1,13 @@
-package pl.solvd.concerthall.dao.interfacesDAO;
+package pl.solvd.concerthall.DAO.interfacesDAO;
 
-import pl.solvd.concerthall.dao.IBaseDAO;
-import pl.solvd.concerthall.entities.PriceLevel;
+import pl.solvd.concerthall.DAO.IBaseDAO;
+import pl.solvd.concerthall.binary.PriceLevel;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface IPriceLevelDAO extends IBaseDAO <PriceLevel, Long> {
-    List <PriceLevel> getAllPriceLevelBy (Predicate<PriceLevel> predicate) throws Exception;
-    PriceLevel getEntityById(Long id) throws Exception;
+public interface IPriceLevelDAO extends IBaseDAO<PriceLevel, Long> {
+    List<PriceLevel> getAllPriceLevelBy(Predicate<PriceLevel> predicate);
+
+    PriceLevel getEntityById(Long id);
 }

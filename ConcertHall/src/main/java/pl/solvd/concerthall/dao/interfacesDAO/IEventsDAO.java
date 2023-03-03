@@ -1,12 +1,16 @@
-package pl.solvd.concerthall.dao.interfacesDAO;
+package pl.solvd.concerthall.DAO.interfacesDAO;
 
-import pl.solvd.concerthall.dao.IBaseDAO;
-import pl.solvd.concerthall.entities.Events;
+import pl.solvd.concerthall.DAO.IBaseDAO;
+import pl.solvd.concerthall.binary.Events;
+import pl.solvd.concerthall.binary.Genre;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface IEventsDAO extends IBaseDAO <Events, Long> {
-    Events getEntityById(Long id) throws Exception;
-    List <Events> getAllEventsBy (Predicate<Events> predicate) throws Exception;
+public interface IEventsDAO extends IBaseDAO<Events, Long> {
+    Events getEntityById(Long id);
+
+    List<Events> getAllEventsBy(Predicate<Events> predicate);
+
+    List<Genre> findGenresByEventId(Long eventId);
 }

@@ -1,13 +1,13 @@
 package pl.solvd.concerthall.utils;
 
+import pl.solvd.concerthall.DAOReader;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-
-import static pl.solvd.concerthall.App.LOG;
 
 public class ConnectionPool {
     private static ConnectionPool instance;
@@ -21,10 +21,10 @@ public class ConnectionPool {
             final String dbUsername = properties.getProperty("login");
             final String dbPassword = properties.getProperty("password");
             connection = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
-            LOG.info("Connection established");
+            DAOReader.LOG.info("Connection established");
         } catch (SQLException e) {
             e.printStackTrace();
-            LOG.error("Connection Error");
+            DAOReader.LOG.error("Connection Error");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

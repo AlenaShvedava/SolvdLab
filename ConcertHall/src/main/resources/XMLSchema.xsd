@@ -20,12 +20,14 @@
     </xs:complexType>
     <xs:complexType name="program">
         <xs:sequence>
+            <xs:element name="genre" type="genre"/>
             <xs:element name="title" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
             <xs:element name="images" type="images" maxOccurs="unbounded"/>
             <xs:element name="composition" type="composition" maxOccurs="unbounded"/>
             <xs:element name="agelimit" type="xs:string"/>
             <xs:element name="baseprice" type="xs:double"/>
-
+            <xs:element name="concerthalls" type="concerthalls" maxOccurs="unbounded"/>
             <xs:element name="organization" type="xs:string"/>
         </xs:sequence>
         <xs:attribute name="id" type="xs:byte"/>
@@ -40,9 +42,7 @@
 
     <xs:complexType name="composition">
         <xs:sequence>
-            <xs:element name="genre" type="genre"/>
             <xs:element name="title" type="xs:string"/>
-            <xs:element name="description" type="xs:string"/>
             <xs:element name="authors" type="authors" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="id" type="xs:byte"/>

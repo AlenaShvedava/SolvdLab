@@ -1,15 +1,19 @@
-package pl.solvd.concerthall.dao.interfacesDAO;
+package pl.solvd.concerthall.DAO.interfacesDAO;
 
-import pl.solvd.concerthall.dao.IBaseDAO;
-import pl.solvd.concerthall.entities.Composition;
+import pl.solvd.concerthall.DAO.IBaseDAO;
+import pl.solvd.concerthall.binary.Authors;
+import pl.solvd.concerthall.binary.Composition;
+import pl.solvd.concerthall.binary.Program;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface ICompositionDAO extends IBaseDAO <Composition, Long>{
-    List <Composition> getAllCompositionBy (Predicate<Composition> predicate) throws Exception;
-    List<Composition> findCompositionByAuthorsId(Long authorsId) throws SQLException;
-    List<Composition> findCompositionByProgramId(Long programId) throws SQLException;
-    Composition getEntityById(Long id) throws Exception;
+public interface ICompositionDAO extends IBaseDAO<Composition, Long> {
+    Composition getEntityById(Long id);
+
+    List<Composition> getAllCompositionBy(Predicate<Composition> predicate);
+
+    List<Authors> findAuthorsByCompositionId(Long authorsId);
+
+    List<Program> findProgramsByCompositionId(Long programId);
 }

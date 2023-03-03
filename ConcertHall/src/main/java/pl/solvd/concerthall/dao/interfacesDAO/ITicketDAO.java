@@ -1,12 +1,13 @@
-package pl.solvd.concerthall.dao.interfacesDAO;
+package pl.solvd.concerthall.DAO.interfacesDAO;
 
-import pl.solvd.concerthall.dao.IBaseDAO;
-import pl.solvd.concerthall.entities.Ticket;
+import pl.solvd.concerthall.DAO.IBaseDAO;
+import pl.solvd.concerthall.binary.Ticket;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface ITicketDAO extends IBaseDAO<Ticket, Long> {
-    List<Ticket> getAllTicketBy(Predicate<Ticket> predicate) throws Exception;
-    Ticket getEntityById(Long id) throws Exception;
+public interface ITicketDAO extends IBaseDAO <Ticket, Long> {
+    List<Ticket> getAllTicketBy(Predicate <Ticket> predicate);
+
+    Ticket getEntityById(Long id);
 }

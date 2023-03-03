@@ -1,12 +1,13 @@
-package pl.solvd.concerthall.dao.interfacesDAO;
+package pl.solvd.concerthall.DAO.interfacesDAO;
 
-import pl.solvd.concerthall.dao.IBaseDAO;
-import pl.solvd.concerthall.entities.MySeat;
+import pl.solvd.concerthall.DAO.IBaseDAO;
+import pl.solvd.concerthall.binary.MySeat;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface IMySeatDAO extends IBaseDAO <MySeat, Long> {
-    List <MySeat> getAllMySeatBy (Predicate<MySeat> predicate) throws Exception;
-    MySeat getEntityById(Long id) throws Exception;
+public interface IMySeatDAO extends IBaseDAO<MySeat, Long> {
+    List<MySeat> getAllMySeatBy(Predicate<MySeat> predicate);
+
+    MySeat getEntityById(Long id);
 }

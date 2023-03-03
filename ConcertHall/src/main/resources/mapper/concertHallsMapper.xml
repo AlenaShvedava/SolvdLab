@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+<mapper namespace="pl.solvd.concerthall.DAO.interfaces.IConcertHallsDAO">
+    <sql id="body">
+        c.id, c.name, c.address, c.phone
+    </sql>
+    <select id="getEntityById" resultMap="concertHallsResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        concert_halls c
+        WHERE id = #{id}
+    </select>
+    <select id="getAll" resultMap="concertHallsResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        concert_halls c
+    </select>
+    <insert id="addEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into concert_halls (id, name, address, phone, sumNumberOfSeats)
+        values (#{id},#{name},#{address}, #{phone}, #{sumNumberOfSeats})
+    </insert>
+    <update id="updateEntity">
+        update concert_halls set
+        name = #{name},
+        address = #{address}
+        phone = #{phone}
+        sumNumberOfSeats = #{sumNumberOfSeats}
+        where id = #{id}
+    </update>
+    <delete id="deleteEntity">
+        delete from concert_halls where id = #{id}
+    </delete>
+    <select id="findProgramsByConcertHallId" resultMap="concertHallsResultMap">
+        SELECT
+        c.name, p.title, p.description, p.age_limit, p.base_price
+        FROM
+        concert_halls c
+        JOIN program_has_concert_halls pc ON c.id = pc.concert_halls_id
+        JOIN program p ON pc.program_id = p.id
+        where c.id = #{id}
+    </select>
+    <resultMap id="concertHallsResultMap" type="pl.solvd.concerthall.binary.ConcertHalls" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="address" property="address"/>
+        <result column="sumNumber_of_seats" property="sumNumberOfSeats"/>
+        <collection property="program" ofType="pl.solvd.concerthall.binary.Program"
+                    resultMap="ProgramResultMap"/>
+    </resultMap>
+    <resultMap id="ProgramResultMap" type="pl.solvd.concerthall.binary.Program" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="age_limit" property="ageLimit"/>
+        <result column="base_price" property="basePrice"/>
+    </resultMap>
+</mapper>

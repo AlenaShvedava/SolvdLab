@@ -1,12 +1,13 @@
-package pl.solvd.concerthall.dao.interfacesDAO;
+package pl.solvd.concerthall.DAO.interfacesDAO;
 
-import pl.solvd.concerthall.dao.IBaseDAO;
-import pl.solvd.concerthall.entities.Images;
+import pl.solvd.concerthall.DAO.IBaseDAO;
+import pl.solvd.concerthall.binary.Images;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface IImagesDAO extends IBaseDAO <Images, Long> {
-    List <Images> getAllImagesBy (Predicate<Images> predicate) throws Exception;
-    Images getEntityById(Long id) throws Exception;
+public interface IImagesDAO extends IBaseDAO<Images, Long> {
+    List<Images> getAllImagesBy(Predicate<Images> predicate);
+
+    Images getEntityById(Long id);
 }
