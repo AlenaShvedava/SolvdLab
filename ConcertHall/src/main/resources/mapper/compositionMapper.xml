@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+<mapper namespace="pl.solvd.concerthall.DAO.interfaces.ICompositionDAO">
+    <sql id="body">
+        c.id, c.title
+    </sql>
+    <select id="getEntityById" resultMap="compositionResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        composition c
+        WHERE id = #{id}
+    </select>
+    <select id="getAll" resultMap="compositionResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        composition c
+    </select>
+    <insert id="addEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into composition (id, title)
+        values (#{id},#{title})
+    </insert>
+    <update id="updateEntity">
+        update composition set
+        title = #{title},
+        where id = #{id}
+    </update>
+    <delete id="deleteEntity">
+        delete from composition where id = #{id}
+    </delete>
+    <select id="findAuthorsByCompositionId" resultMap="compositionResultMap">
+        SELECT
+        c.title, a.first_name, a.last_name
+        FROM
+        composition c
+        JOIN composition_has_authors ca
+        ON c.id = ca.composition_id
+        JOIN authors a ON ca.authors_id = a.id
+        where c.id =  #{id}
+    </select>
+    <select id="findProgramsByCompositionId" resultMap="compositionResultMap">
+        SELECT
+        c.title, p.title, p.description, p.age_limit, p.base_price
+        FROM
+        composition c
+        JOIN program_has_composition pc ON c.id = pc.composition_id
+        JOIN program p ON pc.program_id = p.id
+        where c.id = #{id}
+    </select>
+    <resultMap id="compositionResultMap" type="pl.solvd.concerthall.binary.Composition" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <collection property="authors" ofType="pl.solvd.concerthall.binary.Authors"
+                    resultMap="AuthorsResultMap"/>
+        <collection property="program" ofType="pl.solvd.concerthall.binary.Program"
+                    resultMap="ProgramResultMap"/>
+    </resultMap>
+    <resultMap id="AuthorsResultMap" type="pl.solvd.concerthall.binary.Authors" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="first_name" property="firstName"/>
+        <result column="last_name" property="lastName"/>
+    </resultMap>
+    <resultMap id="ProgramResultMap" type="pl.solvd.concerthall.binary.Program" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="age_limit" property="ageLimit"/>
+        <result column="base_price" property="basePrice"/>
+    </resultMap>
+</mapper>

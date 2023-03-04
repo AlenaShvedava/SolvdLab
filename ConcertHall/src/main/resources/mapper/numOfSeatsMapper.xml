@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+<mapper namespace="pl.solvd.concerthall.DAO.interfacesDAO.INumOfSeatsDAO">
+    <sql id="body">
+        n.id, n.concert_halls_id, n.price_level_id, n.amount_of_seats
+    </sql>
+    <select id="getEntityById" resultMap="numOfSeatsResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        num_of_seats n
+        WHERE id = #{id}
+    </select>
+    <select id="getAll" resultMap="numOfSeatsResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        num_of_seats n
+    </select>
+    <insert id="addEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into num_of_seats (id, concertHallsId, priceLevelId, amountOfSeats)
+        values (#{id}, #{concertHallsId}, #{priceLevelId}, #{amountOfSeats})
+    </insert>
+    <update id="updateEntity">
+        update num_of_seats set
+        concertHallsId = #{concertHallsId},
+        priceLevelId = #{priceLevelId}
+        amountOfSeats = #{amountOfSeats}
+        where id = #{id}
+    </update>
+    <delete id="deleteEntity">
+        delete from num_of_seats where id = #{id}
+    </delete>
+    <resultMap id="numOfSeatsResultMap" type="pl.solvd.concerthall.binary.NumOfSeats" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="concert_halls_id" property="concertHallsId"/>
+        <result column="price_level_id" property="priceLevelId"/>
+        <result column="amount_of_seats" property="amountOfSeats"/>
+    </resultMap>
+</mapper>
