@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+<mapper namespace="pl.solvd.concerthall.DAO.interfacesDAO.IProgramDAO">
+    <sql id="body">
+        p.id, p.title, p.description, p.organization_id, p.age_limit, p.base_price
+    </sql>
+    <select id="getEntityById" resultMap="programResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        program p
+        WHERE p.id = #{id}
+    </select>
+    <select id="getAll" resultMap="programResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        program p
+    </select>
+    <insert id="addEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into program (id, title, description, organizationId, ageLimit, basePrice)
+        values (#{id}, #{title}, #{description}, #{organizationId}, #{ageLimit}, #{basePrice})
+    </insert>
+    <update id="updateEntity">
+        update program set
+        title = #{title},
+        description = #{description}
+        ageLimit = #{ageLimit}
+        organizationId = #{organizationId}
+        basePrice = #{basePrice}
+        where id = #{id}
+    </update>
+    <delete id="deleteEntity">
+        delete from program where id = #{id}
+    </delete>
+    <select id="findCompositionByProgramId" resultMap="programResultMap">
+        SELECT
+        c.title, p.title, p.description, p.organization_id, p.age_limit, p.base_price
+        FROM
+        program p
+        JOIN program_has_composition pc ON p.id = pc.program_id
+        JOIN composition c ON pc.composition_id = c.id
+        where p.id = #{id}
+    </select>
+    <select id="findGenreByProgramId" resultMap="programResultMap">
+        SELECT
+        g.type, p.title, p.description, p.organization_id, p.age_limit, p.base_price
+        FROM
+        program p
+        JOIN program_has_genre pg ON p.id = pg.program_id
+        JOIN genre g ON pg.genre_id = g.id
+        WHERE p.id = #{id}
+    </select>
+    <select id="findConcertHallByProgramId" resultMap="programResultMap">
+        SELECT
+        p.title, c.name, c.address, c.phone
+        FROM
+        program p
+        JOIN program_has_concert_halls pc ON p.id = pc.program_id
+        JOIN concert_halls c ON pc.concert_halls_id = c.id
+        WHERE p.id = #{id}
+    </select>
+    <select id="findPostersByProgramId" resultMap="programResultMap">
+        SELECT
+        p.title, p.description, p.age_limit, p.base_price, po.day, po.month, po.year, po.time
+        FROM
+        program p
+        JOIN poster_has_program pp ON p.id = pp.program_id
+        JOIN poster po ON pp.poster_id = po.id
+        WHERE p.id = #{id}
+    </select>
+    <select id="findImagesByProgramId" resultMap="programResultMap">
+        SELECT
+        p.title, p.description, p.age_limit, p.base_price, i.image_path, i.isPrimary
+        FROM
+        program p
+        JOIN images i ON p.id = i.program_id
+        WHERE p.id = #{id}
+    </select>
+    <resultMap id="programResultMap" type="pl.solvd.concerthall.binary.Program" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="organization_id" property="organizationId"/>
+        <result column="age_limit" property="ageLimit"/>
+        <result column="base_price" property="basePrice"/>
+        <collection property="genre" ofType="pl.solvd.concerthall.binary.Genre"
+                    resultMap="GenreResultMap"/>
+        <collection property="composition" ofType="pl.solvd.concerthall.binary.Composition"
+                    resultMap="CompositionResultMap"/>
+        <collection property="concertHall" ofType="pl.solvd.concerthall.binary.ConcertHalls"
+                    resultMap="ConcertHallsResultMap"/>
+        <collection property="poster" ofType="pl.solvd.concerthall.binary.Poster"
+                    resultMap="PosterResultMap"/>
+        <collection property="images" ofType="pl.solvd.concerthall.binary.Images"
+                    resultMap="ImagesResultMap"/>
+    </resultMap>
+    <resultMap id="GenreResultMap" type="pl.solvd.concerthall.binary.Genre" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+    </resultMap>
+    <resultMap id="CompositionResultMap" type="pl.solvd.concerthall.binary.Composition" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+    </resultMap>
+    <resultMap id="ConcertHallsResultMap" type="pl.solvd.concerthall.binary.ConcertHalls" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="address" property="address"/>
+        <result column="phone" property="phone"/>
+        <result column="sumNumber_of_seats" property="sumNumberOfSeats"/>
+    </resultMap>
+    <resultMap id="PosterResultMap" type="pl.solvd.concerthall.binary.Poster" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="day" property="day"/>
+        <result column="month" property="month"/>
+        <result column="year" property="year"/>
+        <result column="time" property="time"/>
+    </resultMap>
+    <resultMap id="ImagesResultMap" type="pl.solvd.concerthall.binary.Images" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="image_path" property="imagePath"/>
+        <result column="program_id" property="programId"/>
+        <result column="isPrimary" property="isPrimary"/>
+    </resultMap>
+</mapper>

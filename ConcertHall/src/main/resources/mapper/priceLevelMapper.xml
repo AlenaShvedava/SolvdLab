@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+<mapper namespace="pl.solvd.concerthall.DAO.interfacesDAO.IPriceLevelDAO">
+    <sql id="body">
+        p.id, p.type, p.coefficient
+    </sql>
+    <select id="getEntityById" resultMap="priceLevelResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        price_level p
+        WHERE id = #{id}
+    </select>
+    <select id="getAll" resultMap="priceLevelResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        price_level p
+    </select>
+    <insert id="addEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into price_level (id, type, coefficient)
+        values (#{id}, #{type}, #{coefficient})
+    </insert>
+    <update id="updateEntity">
+        update price_level set
+        type = #{type},
+        coefficient = #{coefficient}
+        where id = #{id}
+    </update>
+    <delete id="deleteEntity">
+        delete from price_level where id = #{id}
+    </delete>
+    <resultMap id="priceLevelResultMap" type="pl.solvd.concerthall.binary.PriceLevel" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="type" property="type"/>
+        <result column="coefficient" property="coefficient"/>
+    </resultMap>
+</mapper>

@@ -1,0 +1,151 @@
+{
+  "poster": [
+    {
+      "id": 1,
+      "year": 2023,
+      "month": 1,
+      "day": 27,
+      "time": 11.30,
+      "program": [
+        {
+          "id": 1,
+          "genre": [
+            {
+              "id": 6,
+              "type": "ballet"
+            }
+          ],
+          "title": "Nutcracker",
+          "description": "At midnight on Christmas Eve, Clara creeps downstairs – and is instantly swept away\ninto an enchanting winter wonderland of dancing snowflakes, magical Christmas trees and a Sugar\nPlum Fairy…\nSir Peter Wright’s classic production of this timeless ballet returns to Birmingham Hippodrome\nfollowing an extensive rebuild of John Macfarlane’s exquisite sets.\nRunning Time: 2 hours 10 minutes",
+          "images": [
+            {
+              "id": 1,
+              "imagepath": "https://d3t6cln5382rz2.cloudfront.net/_imager/files/Shows/Nutcracker/36918/216468_4b18302267c6125912375f7ef043de1b.jpg"
+            },
+            {
+              "id": 2,
+              "imagepath": "https://player.vimeo.com/video/774710035?background=1"
+            }
+          ],
+          "composition": [
+            {
+              "id": 1,
+              "title": "Nutcracker",
+              "authors": [
+                {
+                  "id": 1,
+                  "authortypes": [
+                    {
+                      "id": 1,
+                      "type": "composer"
+                    }
+                  ],
+                  "firstname": "Pyotr",
+                  "lastname": "Tchaikovsky"
+                },
+                {
+                  "id": 2,
+                  "authortypes": [
+                    {
+                      "id": 3,
+                      "type": "producer"
+                    }
+                  ],
+                  "firstname": "Peter",
+                  "lastname": "Wright"
+                },
+                {
+                  "id": 3,
+                  "authortypes": [
+                    {
+                      "id": 4,
+                      "type": "librist"
+                    }
+                  ],
+                  "firstname": "Maruis",
+                  "lastname": "Petipa"
+                },
+                {
+                  "id": 4,
+                  "authortypes": [
+                    {
+                      "id": 5,
+                      "type": "decorator"
+                    }
+                  ],
+                  "firstname": "John",
+                  "lastname": "Macfarlane"
+                }
+              ]
+            }
+          ],
+          "agelimit": "6+",
+          "baseprice": 28.50,
+          "concerthalls": [
+            {
+              "id": 3,
+              "name": "Glasgo Theatre",
+              "phone": "+44 141 353 8000",
+              "address": "2Sauchiehall St, Glasgow G2 3NY, UK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "year": 2023,
+      "month": 2,
+      "day": 1,
+      "time": 19.00,
+      "program": [
+      {
+        "id": 1,
+        "genre": [
+          {
+            "id": 2,
+            "type": "show"
+          }
+        ],
+        "title": "O",
+        "description": "Weaving a tapestry of artistry, surrealism and theatrical romance, \"O\" pays tribute to the\nbeauty\nof theatre.\nInspired by the concept of infinity and the elegance of water, world-class acrobats, synchronized\nswimmers\nand divers create a breathtaking experience.",
+        "images": [
+          {
+            "id": 6,
+            "imagepath": "https://tournavigator.pro/%D1%84%D0%BE%D1%82%D0%BE%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%8F/d/3072/other/1000/1020/1466785750.tif\n"
+          }
+        ],
+        "composition": [
+          {
+            "id": 2,
+            "title": "Circus du Soleil O",
+            "authors": [
+              {
+                "id": 5,
+                "authortypes": [
+                  {
+                    "id": 3,
+                    "type": "producer"
+                  }
+                ],
+                "firstname": "Jean-François",
+                "lastname": "Bouchard"
+              }
+            ]
+          }
+        ],
+        "agelimit": "5+",
+        "baseprice": 73.00,
+        "concerthalls": [
+          {
+            "id": 1,
+            "name": "LEGENDA Concert Hall<",
+            "phone": "+48222959000",
+            "address": "al. Księcia Józefa Poniatowskiego 1, 03-901 Warszawa"
+          }
+        ]
+      }
+        ]
+    }
+  ]
+}

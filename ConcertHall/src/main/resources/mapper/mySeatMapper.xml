@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+<mapper namespace="pl.solvd.concerthall.DAO.interfacesDAO.IMySeatDAO">
+    <sql id="body">
+        m.row_number, m.seat_number, m.num_of_seats_id
+    </sql>
+    <select id="getEntityById" resultMap="mySeatResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        my_seat m
+        WHERE id = #{id}
+    </select>
+    <select id="getAll" resultMap="mySeatResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        my_seat m
+    </select>
+    <insert id="addEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into my_seat (id, rowNumber, seatNumber, numOfSeatsId)
+        values (#{id}, #{rowNumber}, #{seatNumber}, #{numOfSeatsId})
+    </insert>
+    <update id="updateEntity">
+        update my_seat set
+        rowNumber = #{rowNumber},
+        seatNumber = #{seatNumber}
+        numOfSeatsId = #{numOfSeatsId}
+        where id = #{id}
+    </update>
+    <delete id="deleteEntity">
+        delete from my_seat where id = #{id}
+    </delete>
+    <resultMap id="mySeatResultMap" type="pl.solvd.concerthall.binary.MySeat" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="row_number" property="rowNumber"/>
+        <result column="seat_number" property="seatNumber"/>
+        <result column="num_of_seats_id" property="numOfSeatsId"/>
+    </resultMap>
+</mapper>

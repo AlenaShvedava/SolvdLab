@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+<mapper namespace="pl.solvd.concerthall.DAO.interfaces.IBillDAO">
+    <sql id="body">
+        b.order_id, b.total_price, b.payment_status, b.active
+    </sql>
+    <select id="getEntityById" resultMap="billResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        bill b
+        WHERE id = #{id}
+    </select>
+    <select id="getAll" resultMap="billResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        bill b
+    </select>
+    <insert id="addEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into bill (id, orderId, totalPrice, paymentStatus, active)
+        values (#{id}, #{orderId}, #{totalPrice}, #{paymentStatus}, #{active})
+    </insert>
+    <update id="updateEntity">
+        update bill set
+        orderId = #{orderId},
+        totalPrice = #{totalPrice}
+        paymentStatus = #{paymentStatus}
+        active = #{active}
+        where id = #{id}
+    </update>
+    <delete id="deleteEntity">
+        delete from bill where id = #{id}
+    </delete>
+    <resultMap id="billResultMap" type="pl.solvd.concerthall.binary.Bill" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="order_id" property="orderId"/>
+        <result column="total_price" property="totalPrice"/>
+        <result column="payment_status" property="paymentStatus"/>
+        <result column="active" property="active"/>
+    </resultMap>
+</mapper>

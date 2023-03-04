@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+<mapper namespace="pl.solvd.concerthall.DAO.interfacesDAO.IOrganizationDAO">
+    <sql id="body">
+        o.id, o.name
+    </sql>
+    <select id="getEntityById" resultMap="organizationResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        organization o
+        WHERE id = #{id}
+    </select>
+    <select id="getAll" resultMap="organizationResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        organization o
+    </select>
+    <insert id="addEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into organization (id, name)
+        values (#{id},#{name})
+    </insert>
+    <update id="updateEntity">
+        update organization set
+        name = #{name}
+        where id = #{id}
+    </update>
+    <delete id="deleteEntity">
+        delete from organization where id = #{id}
+    </delete>
+    <select id="findProgramsByOrganizationId" resultMap="organizationResultMap">
+        SELECT
+        o.name, p.title, p.description, p.age_limit, p.base_price
+        FROM
+        organization o
+        JOIN program p ON o.id = p.organization_id
+        where o.id = #{id}
+    </select>
+    <resultMap id="organizationResultMap" type="pl.solvd.concerthall.binary.Organization" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <collection property="program" ofType="pl.solvd.concerthall.binary.Program"
+                    resultMap="ProgramResultMap"/>
+    </resultMap>
+    <resultMap id="ProgramResultMap" type="pl.solvd.concerthall.binary.Program" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="age_limit" property="ageLimit"/>
+        <result column="base_price" property="basePrice"/>
+    </resultMap>
+</mapper>

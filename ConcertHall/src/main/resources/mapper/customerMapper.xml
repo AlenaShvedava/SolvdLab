@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+<mapper namespace="pl.solvd.concerthall.DAO.interfaces.ICustomerDAO">
+    <sql id="body">
+        c.id, c.first_name, c.last_name, c.email, c.balance
+    </sql>
+    <select id="getEntityById" resultMap="customerResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        customer c
+        WHERE id = #{id}
+    </select>
+    <select id="getAll" resultMap="customerResultMap">
+        SELECT
+        <include refid="body"/>
+        FROM
+        customer c
+    </select>
+    <insert id="addEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into customer (id, firstName, lastName, email, balance)
+        values (#{id},#{firstName},#{lastName}, #{email}, #{balance})
+    </insert>
+    <update id="updateEntity">
+        update customer set
+        firstName = #{firstName},
+        lastName = #{lastName},
+        lastName = #{email},
+        lastName = #{balance}
+        where id = #{id}
+    </update>
+    <delete id="deleteEntity">
+        delete from customer where id = #{id}
+    </delete>
+    <resultMap id="customerResultMap" type="pl.solvd.concerthall.binary.Customer" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="first_name" property="firstName"/>
+        <result column="last_name" property="lastName"/>
+        <result column="email" property="email"/>
+        <result column="balance" property="balance"/>
+    </resultMap>
+</mapper>
